@@ -22,7 +22,7 @@ class Network:
 
     def load_from_xml(self,xml_path):
         with open(xml_path, 'r') as f:
-            net_dict = xd.parse(f, force_list={'host','nic','link'})
+            net_dict = xd.parse(f, force_list={'host', 'nic', 'link'})
 
         self.name = net_dict['network']['name']
         for h in net_dict['network']['hosts']['host']:
@@ -53,6 +53,9 @@ class Network:
             v.clean_up()
         for k, v in self.hosts.items():
             v.delete_host()
+
+    def connect_hosts(self, host1, host2):
+        pass
 
 
 

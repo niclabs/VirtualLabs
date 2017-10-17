@@ -29,7 +29,7 @@ class Host:
         return self.nics[int(nic_id)]
 
     def list_nics(self):
-        
+        return self.nics
 
     def delete_host(self):
         self.force_stop()
@@ -38,6 +38,7 @@ class Host:
                          '/var/lib/libvirt/images/' + self.name + '.qcow2'])
 
     def connect_to_other(self, id_other, nic_id):
+        pass
 
 
 
