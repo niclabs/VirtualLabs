@@ -1,4 +1,4 @@
-import models.network as net
+import network_models.network as net
 
 simple_net = net.Network()
 simple_net.load_from_xml("xmls/simple_net.xml")

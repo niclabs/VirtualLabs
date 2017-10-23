@@ -1,6 +1,7 @@
-import nic
-import templates
 import subprocess
+
+import nic
+from resources import templates
 
 
 class Host:
@@ -28,6 +29,10 @@ class Host:
     def get_nic(self, nic_id):
         return self.nics[int(nic_id)]
 
+    def add_nic(self, name, mac=0):
+        nic_info = {'name': name, 'mac': mac}
+        self.nics.append(nic.NIC(nic_info))
+
     def list_nics(self):
         return self.nics
 
@@ -37,8 +42,10 @@ class Host:
         subprocess.call(['virsh', 'vol-delete', '--pool', 'default',
                          '/var/lib/libvirt/images/' + self.name + '.qcow2'])
 
-    def connect_to_other(self, id_other, nic_id):
+    def connect_to_other(self, id_other, nic_name):
         pass
+
+
 
 
 

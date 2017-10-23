@@ -10,14 +10,15 @@ import os
 class Link:
     def __init__(self, settings, hosts):
         self.id = settings['@id']
-        self.delay = settings['delay']
-        self.loss = settings['loss']
-        self.bandwidth = settings['bandwidth']
+
+
+
         self.endpoints = []
         for end in settings['endpoints']['endpoint']:
             self.endpoints.append(endpoint.Endpoint(end, hosts))
 
         self.bridge = br.LinuxBridge("link"+self.id)
+        self.initialize_parameters()
 
     def connect_hosts(self):
         self.connect_host(0)
@@ -70,4 +71,9 @@ class Link:
         filename = self.write_endpoint_xml(index)
         subprocess.call(['virsh', 'detach-device', self.endpoints[index].host.name, '--persistent', filename])
         os.remove(filename)
+
+    def hot_plug(self):
+        pass
+
+    def initialize_parameters(self):
 
