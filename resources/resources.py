@@ -1,5 +1,7 @@
 from host_interfaces import HostInterfaces
-from templates import Template
+import templates
 
-interfaces = HostInterfaces
-os_templates = Template
+interfaces = HostInterfaces()
+os_templates = templates.OSTemplates()
+router_templates = templates.RouterTemplates()
+switch_templates = templates.SwitchTemplates()

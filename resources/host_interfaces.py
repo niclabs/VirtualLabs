@@ -15,7 +15,8 @@ class HostInterfaces:
         macs = []
         for interface in self.interfaces:
             interface_info = netifaces.ifaddresses(interface)[netifaces.AF_LINK]
-            macs.append(interface_info['addr'])
+            if interface_info:
+                macs.append(interface_info[0]['addr'])
 
         return macs
 

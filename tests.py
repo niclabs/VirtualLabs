@@ -1,7 +1,8 @@
-import network_models.network as net
+import resources.resources as res
+import resources.template as tem
 
-simple_net = net.Network()
-simple_net.load_from_xml("xmls/simple_net.xml")
-simple_net.construct_topology()
+print res.os_templates.list_templates()
+print res.router_templates.list_templates()
+print res.switch_templates.list_templates()
 
-simple_net.show_links()
+print tem.Template('terminal', 0)
