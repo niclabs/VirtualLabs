@@ -5,14 +5,13 @@ import xmltodict as xd
 import copy
 import linux.linux_utils
 import os
+import parsers.link_parser as lp
 
 
 class Link:
     def __init__(self, settings, hosts):
+        self.settings = settings
         self.id = settings['@id']
-
-
-
         self.endpoints = []
         for end in settings['endpoints']['endpoint']:
             self.endpoints.append(endpoint.Endpoint(end, hosts))
@@ -76,4 +75,18 @@ class Link:
         pass
 
     def initialize_parameters(self):
+        parser = lp.LinkInfoParser(self.settings)
+        parameters = parser.get_all_parsed()
 
+        self.bridge.add_reordering(parameters['reordering'])
+        self.bridge.add_delay(parameters['delay'])
+        self.bridge.add_loss(parameters['loss'])
+        self.bridge.add_gap_reordering(parameters['gap'])
+        self.bridge.add_corruption(parameters['corruption'])
+        self.bridge.add_duplication(parameters['duplication'])
+
+    def link_condition(self):
+        pass
+
+    def clean_link(self):
+        self.bridge.cleanup_bridge()

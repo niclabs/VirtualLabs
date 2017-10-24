@@ -12,8 +12,6 @@ class OSTemplates:
 
 
 
-templates = OSTemplates()
-
 
 class Template:
     def __init__(self, info):

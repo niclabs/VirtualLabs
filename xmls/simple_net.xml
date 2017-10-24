@@ -28,8 +28,6 @@
 	</hosts>
 	<links>
 		<link id="0">
-			<delay></delay>
-			<loss></loss>
 			<bandwidth></bandwidth>
 			<endpoints>
 				<endpoint> 

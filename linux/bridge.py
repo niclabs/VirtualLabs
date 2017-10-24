@@ -23,19 +23,24 @@ class LinuxBridge:
     def qdisc_array(self):
         return ['tc', 'qdisc', 'change', 'dev', self.name, 'root', 'netem']
 
-    def add_delay(self, delay, ran_var=0, correlation=0):
-        command = self.qdisc_array() + ['delay', delay, ran_var, correlation]
-        subprocess.call(command)
+    def add_delay(self, delay_dic):
+        if delay_dic:
+            command = self.qdisc_array() + ['delay', delay_dic['value'], delay_dic['ran'], delay_dic['corr']]
+            if delay_dic['dist']:
+                command += ['distribution', delay_dic['dist']]
+
+            subprocess.call(command)
 
     def remove_delay(self):
-        self.add_delay(0)
+        self.add_delay({'value': 0})
 
-    def add_loss(self, loss, ran_var=0):
-        command = self.qdisc_array() + ['loss', loss, ran_var]
-        subprocess.call(command)
+    def add_loss(self, loss_dic):
+        if loss_dic:
+            command = self.qdisc_array() + ['loss', loss_dic['value'], loss_dic['ran']]
+            subprocess.call(command)
 
     def remove_loss(self):
-        self.add_loss(0)
+        self.add_loss({'value': 0})
 
     def add_duplication(self, dup):
         command = self.qdisc_array() + ['duplicate', dup]
@@ -51,19 +56,21 @@ class LinuxBridge:
     def remove_corruption(self):
         self.add_corruption(0)
 
-    def add_gap_reordering(self, index, delay):
-        command = self.qdisc_array() + ['gap', index, 'delay', delay]
-        subprocess.call(command)
+    def add_gap_reordering(self, gap_dic):
+        if gap_dic:
+            command = self.qdisc_array() + ['gap', gap_dic['pac'], 'delay', gap_dic['delay']]
+            subprocess.call(command)
 
     def remove_gap_reordering(self):
         pass
 
-    def add_reordering(self, delay, prob=0, corr=0):
-        command = self.qdisc_array() + ['delay', delay, 'reorder', prob, corr]
-        subprocess.call(command)
+    def add_reordering(self, reor_dic):
+        if reor_dic:
+            command = self.qdisc_array() + ['delay', reor_dic['delay'], 'reorder', reor_dic['prob'], reor_dic['corr']]
+            subprocess.call(command)
 
     def remove_reordering(self):
-        self.add_reordering(0)
+        self.add_reordering({'delay': 0})
 
     def add_max_bandwidth(self):
         pass

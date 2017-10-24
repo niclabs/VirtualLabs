@@ -1,46 +1,1 @@
-<network>
-	<name>simple_net</name>
-	<hosts>
-		<host id="0" type="terminal">
-			<name>pc1</name>
-			<template>0</template>
-			<nics>
-				<nic>
-					<name>eth0</name>
-					<mac>52:54:00:e1:97:7f</mac>
-				</nic>
-				<nic>
-					<name>eth1</name>
-					<mac>52:56:00:e1:97:7f</mac>
-				</nic>
-			</nics>
-		</host>
-		<host id="1" type="terminal">
-			<name>pc2</name>
-			<template>0</template>
-			<nics>
-				<nic>
-					<name>eth0</name>
-					<mac>52:54:00:e1:97:8e</mac>
-				</nic>
-			</nics>
-		</host>
-	</hosts>
-	<links>
-		<link id="0">
-			<delay></delay>
-			<loss></loss>
-			<bandwidth></bandwidth>
-			<endpoints>
-				<endpoint> 
-					<host id="0"/>
-					<nic id="0"/>
-				</endpoint>
-				<endpoint>
-					<host id="1"/>
-					<nic id="0"/>
-				</endpoint>
-			</endpoints>
-		</link>
-	</links>
-</network>
+<network>	<name>cloned_hosts</name>	<hosts>		<clone start_id="0" type="terminal">			<name>clones</name>			<copies>5</copies>			<template>0</template>			<nics>				<number>2</number>			</nics>		</clone>		<host id="1" type="terminal">			<name>pc2</name>			<template>0</template>			<nics>				<nic>					<name>eth0</name>					<mac>52:54:00:e1:97:8e</mac>				</nic>			</nics>		</host>	</hosts>	<links>		<link id="0">			<endpoints>				<endpoint> 					<host id="0"/>					<nic id="0"/>				</endpoint>				<endpoint>					<host id="1"/>					<nic id="0"/>				</endpoint>			</endpoints>		</link>	</links></network>
