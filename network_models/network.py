@@ -2,6 +2,7 @@ import terminal
 import router
 import switch
 from parsers.network_parser import NetworkParser
+from parsers.guest_parser import GuestParser
 
 
 host_types = {
@@ -22,7 +23,12 @@ class Network:
 
     def load_from_xml(self, xml_path):
         parser = NetworkParser(xml_path)
-        parser.get_parsed_network()
+
+        net_dic = parser.get_parsed_network()
+
+
+
+
 
     def list_hosts(self):
         return self.hosts

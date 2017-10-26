@@ -8,5 +8,7 @@ class Connection:
     def list_machines(self):
         return self.connection.listDefinedDomains()
 
+    def lookupByName(self, name):
+        return self.connection.lookupByName(name)
 
 

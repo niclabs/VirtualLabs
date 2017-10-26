@@ -2,10 +2,10 @@ import netifaces
 import random
 
 
-class HostInterfaces:
-    def __init__(self):
+class NonCollisionMacGenerator:
+    def __init__(self, other_macs):
         self.interfaces = self.list_interfaces()
-        self.mac_adresses = self.list_macs()
+        self.mac_adresses = self.list_macs().extend(other_macs)
 
     @staticmethod
     def list_interfaces():
@@ -35,4 +35,11 @@ class HostInterfaces:
         while candidate not in self.mac_adresses:
             candidate = self.create_mac()
 
+        self.mac_adresses.append(candidate)
         return candidate
+
+    def add_mac_to_list(self, mac):
+        self.mac_adresses.append(mac)
+
+    def __contains__(self, item):
+        return item in self.mac_adresses

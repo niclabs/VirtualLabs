@@ -1,6 +1,6 @@
-from host import Host
+from guest import Guest
 
 
-class Terminal(Host):
+class Terminal(Guest):
     def __init__(self, os_info):
-        Host.__init__(os_info)
+        Guest.__init__(os_info)

@@ -10,9 +10,6 @@ class Container:
         else:
             raise ValueError('Ids must be unique')
 
-
-
-
     def add_element(self, elem):
         self.add_element_with_id(elem, self.next_id)
 

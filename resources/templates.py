@@ -12,6 +12,9 @@ class Templates:
     def list_templates(self):
         return self.templates
 
+    def __contains__(self, item):
+        return item in self.templates
+
 
 class OSTemplates(Templates):
     def __init__(self):
