@@ -7,7 +7,7 @@ from resources import templates
 class Host:
     def __init__(self, os_info):
         self.name = os_info['name']
-        self.template = templates.Template(os_info['@id'])
+        self.template = templates.Template(os_info['template'])
         self.nics = []
         for n in os_info['nics']['nic']:
             self.nics.append(nic.NIC(n))

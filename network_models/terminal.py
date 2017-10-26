@@ -1,6 +1,6 @@
-import host
+from host import Host
 
 
-class Terminal(host):
+class Terminal(Host):
     def __init__(self, os_info):
-        Terminal.__init__(os_info)
+        Host.__init__(os_info)

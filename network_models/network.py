@@ -1,8 +1,8 @@
-import xmltodict as xd
-import link
 import terminal
 import router
 import switch
+from parsers.network_parser import NetworkParser
+
 
 host_types = {
     'terminal': lambda x: terminal.Terminal(x),
@@ -20,16 +20,9 @@ class Network:
     def to_xml(self):
         xml = {}
 
-    def load_from_xml(self,xml_path):
-        with open(xml_path, 'r') as f:
-            net_dict = xd.parse(f, force_list={'host', 'nic', 'link'})
-
-        self.name = net_dict['network']['name']
-        for h in net_dict['network']['hosts']['host']:
-            self.hosts[h['@id']] = host_types[h['@type']](h)
-
-        for l in net_dict['network']['links']['link']:
-            self.links[l['@id']] = link.Link(l)
+    def load_from_xml(self, xml_path):
+        parser = NetworkParser(xml_path)
+        parser.get_parsed_network()
 
     def list_hosts(self):
         return self.hosts
