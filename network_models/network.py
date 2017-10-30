@@ -25,7 +25,7 @@ class Network:
         parser = NetworkParser(xml_path)
 
         net_dic = parser.get_parsed_network()
-
+        #Falta crear las cosas usando lo parseado
 
 
 

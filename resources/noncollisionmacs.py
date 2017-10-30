@@ -5,7 +5,8 @@ import random
 class NonCollisionMacGenerator:
     def __init__(self, other_macs):
         self.interfaces = self.list_interfaces()
-        self.mac_adresses = self.list_macs().extend(other_macs)
+        self.mac_adresses = self.list_macs()
+        self.mac_adresses.extend(other_macs)
 
     @staticmethod
     def list_interfaces():
@@ -32,7 +33,7 @@ class NonCollisionMacGenerator:
 
     def create_new_mac(self):
         candidate = self.create_mac()
-        while candidate not in self.mac_adresses:
+        while candidate in self.mac_adresses:
             candidate = self.create_mac()
 
         self.mac_adresses.append(candidate)

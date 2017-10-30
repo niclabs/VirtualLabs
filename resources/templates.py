@@ -15,6 +15,9 @@ class Templates:
     def __contains__(self, item):
         return item in self.templates
 
+    def number(self):
+        return len(self.templates)
+
 
 class OSTemplates(Templates):
     def __init__(self):

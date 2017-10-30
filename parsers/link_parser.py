@@ -1,73 +1,24 @@
-class LinkInfoParser:
-    def __init__(self, settings):
-        self.settings = settings
-        self.bandwidth = settings['bandwidth'] if 'bandwidth' in settings else ''
+class LinkParser:
+    def __init__(self, guest_name_list, guest_list):
+        self.guest_names = guest_name_list
+        self.guest_list = guest_list
 
-    def parse_delay(self):
-        delay_dic = {}
+    def parse_link(self, link_dic):
+        if 'endpoints' not in link_dic:
+            raise ValueError("Can not define a link without endpoints")
 
-        if 'delay' in self.settings:
-            delay = self.settings['delay']
+        if len(link_dic['endpoints']['endpoint']) is not 2:
+            raise ValueError("A link must have exactly two endpoints")
 
-            delay_dic['value'] = delay['value'] if 'value' in delay else 0
-            delay_dic['ran'] = delay['random_variation'] if 'random_variation' in delay else 0
-            delay_dic['corr'] = delay['correlation'] if 'correlation' in delay else 0
-            delay_dic['dist'] = delay['distribution'] if 'distribution' in delay else ''
+        for e in link_dic['endpoints']['endpoint']:
+            if '@id' in e['guest']:
+                if e['guest']['@id'] not in self.guest_list.keys():
+                    raise ValueError("Trying to create an endpoint with a non existant guest")
 
-        return delay_dic
+            elif '@name' in e['guest']:
+                if e['guest']['@name'] not in self.guest_names:
+                    raise ValueError("Trying to create an endpoint with a non existant guest")
+            else:
+                raise ValueError("An endpoints needs an associated guest")
 
-    def parse_loss(self):
-        loss_dic = {}
 
-        if 'loss' in self.settings:
-            loss = self.settings['loss']
-
-            loss_dic['value'] = loss['value'] if 'value' in loss else 0
-            loss_dic['ran'] = loss['random_variation'] if 'random_variation' in loss else 0
-
-        return loss_dic
-
-    def parse_bandwidth(self):
-        pass
-
-    def parse_duplication(self):
-        dup = 0
-        if 'duplication' in self.settings:
-            dup = self.settings['duplication']
-
-        return dup
-
-    def parse_corruption(self):
-        cor = 0
-        if 'corruption' in self.settings:
-            cor = self.settings['corruption']
-
-        return cor
-
-    def parse_gap_reordering(self):
-        gap_dic = {}
-
-        if 'gap' in self.settings:
-            gap = self.settings['gap']
-
-            gap_dic['pac'] = gap['pac_index'] if 'pac_index' in gap else 0
-            gap_dic['delay'] = gap['delay'] if 'delay' in gap else 0
-
-        return gap_dic
-
-    def parse_reordering(self):
-        reor_dic = {}
-
-        if 'reordering' in self.settings:
-            reor = self.settings['reordering']
-
-            reor_dic['delay'] = reor['delay'] if 'delay' in reor else 0
-            reor_dic['prob'] = reor['probability'] if 'probability' in reor else 0
-            reor_dic['corr'] = reor['correlation'] if 'correlation' in reor else 0
-
-        return reor_dic
-
-    def get_all_parsed(self):
-        return {'delay': self.parse_delay(), 'loss': self.parse_loss(), 'bandwidth': self.parse_bandwidth(),
-                'duplication': self.parse_duplication(), 'corruption': self.parse_corruption(),
-                'gap': self.parse_gap_reordering(), 'reordering': self.parse_reordering()}

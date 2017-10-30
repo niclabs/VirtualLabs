@@ -5,7 +5,7 @@ import xmltodict as xd
 import copy
 import linux.linux_utils
 import os
-import parsers.link_parser as lp
+import parsers.link_info_parser as lp
 
 
 class Link:

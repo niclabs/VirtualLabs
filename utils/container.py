@@ -15,3 +15,9 @@ class Container:
 
     def __contains__(self, item):
         return item in self.dic
+
+    def get_ids(self):
+        return self.dic.keys()
+
+    def get_dict(self):
+        return self.dic

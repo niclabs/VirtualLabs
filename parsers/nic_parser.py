@@ -5,11 +5,11 @@ from config.default_names import default_nic
 
 class NICParser:
     def __init__(self):
-        self.mac_generator = NonCollisionMacGenerator(Machines.get_all_machines_macs())
+        self.mac_generator = NonCollisionMacGenerator(Machines().get_all_machines_macs())
         self.guest_nic_names = []
         self.next_nic = 0
 
-    def parse_nic(self, nic_dic):
+    def parse_nic(self, nic_dic={}):
         name = ''
         mac = ''
 
