@@ -5,10 +5,12 @@ from parsers.guest_parser import GuestParser
 
 
 class Guest:
-    def __init__(self, info, nics):
+    def __init__(self, info):
         self.name = info['name']
-        self.template = Template(info['type'], info['template_id'])
-        self.nics = nics
+        self.template = Template(info['type'], info['template'])
+        self.nics = []
+        for n in info['nics']:
+            self.nics.append(nic.NIC(n))
 
     def create_guest(self):
         subprocess.call(['virt-clone', '--connect', 'qemu:///system',

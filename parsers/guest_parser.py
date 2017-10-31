@@ -12,6 +12,7 @@ class GuestParser:
 
     def parse_guest(self, guest_dic):
         guest = {}
+        template = {}
 
         if guest_dic['name'] in self.original_names:
             raise ValueError("Trying to create guest with already existing name")
@@ -28,13 +29,13 @@ class GuestParser:
         if '@name' in guest_dic['template']:
             if guest_dic['template']['@name'] not in templates[guest_dic['@type']]:
                 raise ValueError("Trying to create guest with non existing template")
+            template = {'name': str(guest_dic['template']['@name'])}
         elif '@id' in guest_dic['template']:
             if int(guest_dic['template']['@id']) >= templates[guest_dic['@type']].number():
                 raise ValueError("Trying to create guest with non existing template")
+            template = {'id': int(guest_dic['template']['@id'])}
         else:
             raise ValueError("Each machine must be created from a template")
-
-        guest = {'name': str(guest_dic['name']), 'template': str(guest_dic['template']), 'type': guest_dic['@type']}
 
         self.nic_parser.init_guest()
         nics = []
@@ -47,7 +48,9 @@ class GuestParser:
             nics.append(self.nic_parser.parse_nic())
 
         self.new_names.append(guest_dic['name'])
-        return guest, nics
+
+        guest = {'name': str(guest_dic['name']), 'template': template, 'type': guest_dic['@type'], 'nics': nics}
+        return guest
 
     def get_guests_names(self):
         return self.new_names

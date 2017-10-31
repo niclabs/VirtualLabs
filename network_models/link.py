@@ -9,7 +9,7 @@ import parsers.link_info_parser as lp
 
 
 class Link:
-    def __init__(self, settings, hosts):
+    def __init__(self, settings, link_info):
         self.settings = settings
         self.id = settings['@id']
         self.endpoints = []

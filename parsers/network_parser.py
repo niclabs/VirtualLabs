@@ -54,7 +54,8 @@ class NetworkParser:
                 self.links_ids.add_element_with_id(parsed_link, int(l['@id']))
             else:
                 self.links_ids.add_element(parsed_link)
+        return {'guests': self.guests_ids.get_dict()}
 
     def get_parsed_network(self):
-        self.parse_xml()
+        return self.parse_xml()
 

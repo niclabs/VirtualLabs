@@ -10,7 +10,12 @@ templates = {
 
 class Template:
     def __init__(self, template_type, info):
-        self.name = templates[template_type].get_template(int(info))
+        if 'id' in info:
+            self.name = templates[template_type].get_template(info['id'])
+        elif 'name' in info:
+            self.name = info['name']
+        else:
+            raise ValueError("Can not create template with no name or id")
         self.template = connection.lookupByName(self.name)
 
     def get_template_info(self):

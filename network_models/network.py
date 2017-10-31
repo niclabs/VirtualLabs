@@ -25,10 +25,10 @@ class Network:
         parser = NetworkParser(xml_path)
 
         net_dic = parser.get_parsed_network()
-        #Falta crear las cosas usando lo parseado
 
-
-
+        for g_id in net_dic['guests'].keys():
+            guest = net_dic['guests'][g_id]
+            self.hosts[g_id] = host_types[guest['type']](guest)
 
     def list_hosts(self):
         return self.hosts
