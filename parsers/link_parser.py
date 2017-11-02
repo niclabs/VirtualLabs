@@ -13,8 +13,7 @@ class LinkParser:
             raise ValueError("A link must have exactly two endpoints")
 
         for e in link_dic['endpoints']['endpoint']:
-            endpoint = ''
-            nic_info = []
+            nic = []
 
             if 'link_guest' not in e:
                 raise ValueError("Can not create a link with no guest at endpoint")
@@ -28,14 +27,29 @@ class LinkParser:
                 endpoint = {'id': int(e['link_guest']['@id'])}
                 nic_info = self.guest_list[endpoint['id']]['nics']
             elif '@name' in e['link_guest']:
-                if e['link_guest']['@name'] not in self.guest_names:
+                if e['link_guest']['@name'] not in self.guest_names.keys():
                     raise ValueError("Trying to create an endpoint with a non existant guest")
                 endpoint = {'name': str(e['link_guest']['@name'])}
-                #nic_info = self.
+                nic_info = self.guest_list[self.guest_names[endpoint['name']]]['nics']
             else:
                 raise ValueError("An endpoints needs an associated guest")
 
             if '@id' in e['link_nic']:
                 if int(e['link_nic']['@id']) >= len(nic_info):
                     raise ValueError("Can not connect using a non existent nic")
+                nic = nic_info[int(e['link_nic']['@id'])]
+            elif '@name' in e['link_nic']:
+                for n in nic_info:
+                    if n.interface == e['link_nic']['@name']:
+                        nic = n
+
+                if not nic:
+                    raise ValueError("Can not connect using a non existent nic")
+
+            endpoint['nic'] = nic
+            endpoints.append(endpoint)
+
+        return endpoints
+
+
 

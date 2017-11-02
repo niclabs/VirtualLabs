@@ -7,7 +7,7 @@ from parsers.nic_parser import NICParser
 class GuestParser:
     def __init__(self):
         self.original_names = Host.list_existing_machines()
-        self.new_names = []
+        self.new_names = {}
         self.nic_parser = NICParser()
 
     def parse_guest(self, guest_dic):
@@ -17,7 +17,7 @@ class GuestParser:
         if guest_dic['name'] in self.original_names:
             raise ValueError("Trying to create guest with already existing name")
 
-        if guest_dic['name'] in self.new_names:
+        if guest_dic['name'] in self.new_names.keys():
             raise ValueError("Collision of names in the network. Names must be unique.")
 
         if str(guest_dic['name']).startswith('template_'):
@@ -47,10 +47,11 @@ class GuestParser:
         for i in range(0, number):
             nics.append(self.nic_parser.parse_nic())
 
-        self.new_names.append(guest_dic['name'])
-
         guest = {'name': str(guest_dic['name']), 'template': template, 'type': guest_dic['@type'], 'nics': nics}
         return guest
 
     def get_guests_names(self):
         return self.new_names
+
+    def add_id_to_guest(self, guest_name, guest_id):
+        self.new_names[guest_name] = guest_id
