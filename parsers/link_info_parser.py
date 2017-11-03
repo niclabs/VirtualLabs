@@ -22,8 +22,8 @@ class LinkInfoParser:
         if 'loss' in self.settings:
             loss = self.settings['loss']
 
-            loss_dic['value'] = loss['value'] if 'value' in loss else 0
-            loss_dic['ran'] = loss['random_variation'] if 'random_variation' in loss else 0
+            loss_dic['value'] = int(loss['value']) if 'value' in loss else 0
+            loss_dic['ran'] = int(loss['random_variation']) if 'random_variation' in loss else 0
 
         return loss_dic
 

@@ -1,8 +1,8 @@
 import terminal
 import router
 import switch
+import link
 from parsers.network_parser import NetworkParser
-from parsers.guest_parser import GuestParser
 
 
 host_types = {
@@ -29,6 +29,10 @@ class Network:
         for g_id in net_dic['guests'].keys():
             guest = net_dic['guests'][g_id]
             self.hosts[g_id] = host_types[guest['type']](guest)
+
+        for l_id in net_dic['links'].keys():
+            l = net_dic['links'][l_id]
+            self.links[l_id] = link.Link(l_id, l, self.hosts)
 
     def list_hosts(self):
         return self.hosts

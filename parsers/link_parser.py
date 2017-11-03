@@ -1,3 +1,6 @@
+from parsers.link_info_parser import LinkInfoParser
+
+
 class LinkParser:
     def __init__(self, guest_name_list, guest_list):
         self.guest_names = guest_name_list
@@ -49,7 +52,13 @@ class LinkParser:
             endpoint['nic'] = nic
             endpoints.append(endpoint)
 
-        return endpoints
+        settings = {}
+        if 'settings' in link_dic:
+            settings = LinkInfoParser(link_dic['settings']).get_all_parsed()
+
+        link = {'endpoints': endpoints, 'settings': settings}
+
+        return link
 
 
 

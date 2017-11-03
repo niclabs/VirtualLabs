@@ -9,14 +9,14 @@ import parsers.link_info_parser as lp
 
 
 class Link:
-    def __init__(self, settings, link_info):
-        self.settings = settings
-        self.id = settings['@id']
+    def __init__(self, link_id, link_info, hosts):
+        self.id = link_id
+        self.settings = link_info['settings']
         self.endpoints = []
-        for end in settings['endpoints']['endpoint']:
+        for end in link_info['endpoints']:
             self.endpoints.append(endpoint.Endpoint(end, hosts))
 
-        self.bridge = br.LinuxBridge("link"+self.id)
+        self.bridge = br.LinuxBridge("link" + str(self.id))
         self.initialize_parameters()
 
     def connect_hosts(self):

@@ -19,6 +19,7 @@ class NICParser:
                 raise ValueError("Can not repeat nic names")
         else:
             name = default_nic + str(self.next_nic)
+            self.next_nic+=1
 
         if 'mac' in nic_dic:
             mac = nic_dic['mac']

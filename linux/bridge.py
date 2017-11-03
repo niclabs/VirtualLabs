@@ -25,9 +25,9 @@ class LinuxBridge:
 
     def add_delay(self, delay_dic):
         if delay_dic:
-            command = self.qdisc_array() + ['delay', delay_dic['value'], delay_dic['ran'], delay_dic['corr']]
+            command = self.qdisc_array() + ['delay', str(delay_dic['value']), str(delay_dic['ran']), str(delay_dic['corr'])]
             if delay_dic['dist']:
-                command += ['distribution', delay_dic['dist']]
+                command += ['distribution', str(delay_dic['dist'])]
 
             subprocess.call(command)
 
@@ -36,21 +36,21 @@ class LinuxBridge:
 
     def add_loss(self, loss_dic):
         if loss_dic:
-            command = self.qdisc_array() + ['loss', loss_dic['value'], loss_dic['ran']]
+            command = self.qdisc_array() + ['loss', str(loss_dic['value']), str(loss_dic['ran'])]
             subprocess.call(command)
 
     def remove_loss(self):
         self.add_loss({'value': 0})
 
     def add_duplication(self, dup):
-        command = self.qdisc_array() + ['duplicate', dup]
+        command = self.qdisc_array() + ['duplicate', str(dup)]
         subprocess.call(command)
 
     def remove_duplication(self):
         self.add_duplication(0)
 
     def add_corruption(self, corr):
-        command = self.qdisc_array() + ['corrupt', corr]
+        command = self.qdisc_array() + ['corrupt', str(corr)]
         subprocess.call(command)
 
     def remove_corruption(self):
@@ -58,7 +58,7 @@ class LinuxBridge:
 
     def add_gap_reordering(self, gap_dic):
         if gap_dic:
-            command = self.qdisc_array() + ['gap', gap_dic['pac'], 'delay', gap_dic['delay']]
+            command = self.qdisc_array() + ['gap', str(gap_dic['pac']), 'delay', str(gap_dic['delay'])]
             subprocess.call(command)
 
     def remove_gap_reordering(self):
@@ -66,7 +66,8 @@ class LinuxBridge:
 
     def add_reordering(self, reor_dic):
         if reor_dic:
-            command = self.qdisc_array() + ['delay', reor_dic['delay'], 'reorder', reor_dic['prob'], reor_dic['corr']]
+            command = self.qdisc_array() + ['delay', str(reor_dic['delay']), 'reorder', str(reor_dic['prob']),
+                                            str(reor_dic['corr'])]
             subprocess.call(command)
 
     def remove_reordering(self):
