@@ -37,10 +37,13 @@ class Network:
     def list_hosts(self):
         return self.guests
 
+    def list_links(self):
+        return self.links
+
     def get_guest(self, guest_id):
         return self.guests[guest_id]
 
-    def turn_on(self):
+    def turn_network_on(self):
         for k, v in self.guests.items():
             v.power_on()
 
@@ -57,8 +60,32 @@ class Network:
         for k, v in self.guests.items():
             v.delete_guest()
 
-    def connect_guests_online(self, guest1, guest2):
-        pass
+    def connect_guests(self, info_guest1, info_guest2, link_settings={}):
+        link_id = max(self.links.keys()) + 1
+
+        l = {'settings': link_settings, 'endpoints': [info_guest1, info_guest2]}
+        self.links[link_id] = link.Link(link_id, l, self.guests)
+        self.links[link_id].connect_guests()
+
+    def disconnect_guests(self, link_id):
+        self.links[link_id].destroy_link()
+        self.links.pop(link_id)
+
+    def add_guest(self, guest_dic, guest_id=-1):
+        if guest_id < 0:
+            guest_id = max(self.guests.keys()) + 1
+
+        new_guest = guests_types[guest_dic['type']](guest_dic)
+        self.guests[guest_id] = new_guest
+
+        return new_guest
+
+    def add_guest_online(self, guest_dic, guest_id=-1):
+        new_guest = self.add_guest(guest_dic, guest_id)
+        new_guest.power_on()
+
+
+
 
 
 

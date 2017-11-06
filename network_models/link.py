@@ -13,6 +13,7 @@ class Link:
         self.id = link_id
         self.settings = link_info['settings']
         self.endpoints = []
+
         for end in link_info['endpoints']:
             self.endpoints.append(endpoint.Endpoint(end, guests))
 
@@ -42,8 +43,6 @@ class Link:
 
         xml_end = copy.deepcopy(xml)
 
-        guest = self.endpoints[i].guest
-
         xml_end['interface']['alias']['@name'] = self.endpoints[i].nic['name']
         xml_end['interface']['mac']['@address'] = self.endpoints[i].nic['mac']
 
@@ -66,13 +65,15 @@ class Link:
     def clean_up(self):
         subprocess.call(['brctl', 'delbr', self.bridge.name])
 
-    def hot_unplug(self, index):
+    def destroy_link(self):
+        self.detach_link(0)
+        self.detach_link(1)
+        self.clean_up()
+
+    def detach_link(self, index):
         filename = self.write_endpoint_xml(index)
         subprocess.call(['virsh', 'detach-device', self.endpoints[index].guest.name, '--persistent', filename])
         os.remove(filename)
-
-    def hot_plug(self):
-        pass
 
     def initialize_parameters(self):
         parser = lp.LinkInfoParser(self.settings)

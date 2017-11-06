@@ -1,15 +1,14 @@
 import subprocess
 import nic
 from resources.template import Template
+from network_models.nics import NICs
 
 
 class Guest:
     def __init__(self, info):
         self.name = info['name']
         self.template = Template(info['type'], info['template'])
-        self.nics = []
-        for n in info['nics']:
-            self.nics.append(nic.NIC(n))
+        self.nics = NICs(info['nics']).create_nics()
 
     def create_guest(self):
         subprocess.call(['virt-clone', '--connect', 'qemu:///system',
@@ -42,8 +41,6 @@ class Guest:
         subprocess.call(['virsh', 'vol-delete', '--pool', 'default',
                          '/var/lib/libvirt/images/' + self.name + '.qcow2'])
 
-    def connect_to_other(self, id_other, nic_name):
-        pass
 
 
 
