@@ -1,7 +1,6 @@
 import subprocess
 import nic
 from resources.template import Template
-from parsers.guest_parser import GuestParser
 
 
 class Guest:
@@ -15,7 +14,8 @@ class Guest:
     def create_guest(self):
         subprocess.call(['virt-clone', '--connect', 'qemu:///system',
                          '--original', self.template.name, '--name', self.name,
-                         '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2'])
+                         '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2',
+                         '--check', 'path_exists=off'])
 
     def power_on(self):
         subprocess.call(['virsh', 'start', self.name])

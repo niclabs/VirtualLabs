@@ -9,19 +9,19 @@ import parsers.link_info_parser as lp
 
 
 class Link:
-    def __init__(self, link_id, link_info, hosts):
+    def __init__(self, link_id, link_info, guests):
         self.id = link_id
         self.settings = link_info['settings']
         self.endpoints = []
         for end in link_info['endpoints']:
-            self.endpoints.append(endpoint.Endpoint(end, hosts))
+            self.endpoints.append(endpoint.Endpoint(end, guests))
 
         self.bridge = br.LinuxBridge("link" + str(self.id))
         self.initialize_parameters()
 
-    def connect_hosts(self):
-        self.connect_host(0)
-        self.connect_host(1)
+    def connect_guests(self):
+        self.connect_guest(0)
+        self.connect_guest(1)
 
     def write_endpoint_xml(self, i):
         xml = {'interface': {
@@ -42,10 +42,10 @@ class Link:
 
         xml_end = copy.deepcopy(xml)
 
-        host = self.endpoints[i].host
+        guest = self.endpoints[i].guest
 
-        xml_end['interface']['alias']['@name'] = host.get_nic(self.endpoints[i].nic).interface
-        xml_end['interface']['mac']['@address'] = host.get_nic(self.endpoints[i].nic).mac_address
+        xml_end['interface']['alias']['@name'] = self.endpoints[i].nic['name']
+        xml_end['interface']['mac']['@address'] = self.endpoints[i].nic['mac']
 
         filename = 'interface_host.xml'
         xml_file = linux.linux_utils.touch(filename)
@@ -54,13 +54,13 @@ class Link:
 
         return filename
 
-    def connect_host(self, i):
+    def connect_guest(self, i):
         filename = self.write_endpoint_xml(i)
-        self.attach_idevice(filename, self.endpoints[i].host.name)
+        self.attach_idevice(filename, self.endpoints[i].guest.name)
 
     @staticmethod
-    def attach_idevice(xml_name, host_name):
-        subprocess.call(['virsh', 'attach-device', host_name, '--config', xml_name])
+    def attach_idevice(xml_name, guest_name):
+        subprocess.call(['virsh', 'attach-device', guest_name, '--config', xml_name])
         os.remove(xml_name)
 
     def clean_up(self):
@@ -68,7 +68,7 @@ class Link:
 
     def hot_unplug(self, index):
         filename = self.write_endpoint_xml(index)
-        subprocess.call(['virsh', 'detach-device', self.endpoints[index].host.name, '--persistent', filename])
+        subprocess.call(['virsh', 'detach-device', self.endpoints[index].guest.name, '--persistent', filename])
         os.remove(filename)
 
     def hot_plug(self):

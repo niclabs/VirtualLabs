@@ -23,13 +23,9 @@ class NonCollisionMacGenerator:
 
     @staticmethod
     def create_mac():
-        return "%02x:%02x:%02x:%02x:%02x:%02x" % (
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255))
+        return "02:00:00:%02x:%02x:%02x" % (random.randint(0, 255),
+                                            random.randint(0, 255),
+                                            random.randint(0, 255))
 
     def create_new_mac(self):
         candidate = self.create_mac()
