@@ -1,0 +1,49 @@
+class LinkChecker:
+    def __init__(self, guest_name_list, guest_list):
+        self.guest_names = guest_name_list
+        self.guest_list = guest_list
+
+    def check_link(self, link_dic):
+        if 'endpoints' not in link_dic:
+            raise ValueError("Can not define a link without endpoints")
+
+        if len(link_dic['endpoints']) is not 2:
+            raise ValueError("A link must have exactly two endpoints")
+
+        for e in link_dic['endpoints']:
+            if 'guest' not in e:
+                raise ValueError("Can not create a link with no guest at endpoint")
+
+            if 'nic' not in e:
+                raise ValueError("Can not create a link with no nic")
+
+            nic_info = self.check_link_guest(e['guest'])
+            self.check_link_nic(e['nic'], nic_info)
+
+    def check_link_guest(self, guest):
+        if 'id' in guest:
+            if int(guest['id']) not in self.guest_list.keys():
+                raise ValueError("Trying to create an endpoint with a non existant guest")
+            nic_info = self.guest_list[guest['id']]
+        elif 'name' in guest:
+            if guest['name'] not in self.guest_names.keys():
+                raise ValueError("Trying to create an endpoint with a non existant guest")
+            nic_info = self.guest_list[self.guest_names[endpoint['name']]]['nics']
+        else:
+            raise ValueError("An endpoints needs an associated guest")
+
+        return nic_info
+
+
+    def check_link_nic(self, nic):
+        if '@id' in e['link_nic']:
+            if int(e['link_nic']['@id']) >= len(nic_info):
+                raise ValueError("Can not connect using a non existent nic")
+            nic = nic_info[int(e['link_nic']['@id'])]
+        elif '@name' in e['link_nic']:
+            for n in nic_info:
+                if n.interface == e['link_nic']['@name']:
+                    nic = n
+
+            if not nic:
+                raise ValueError("Can not connect using a non existent nic")

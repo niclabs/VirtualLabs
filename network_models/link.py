@@ -5,7 +5,7 @@ import xmltodict as xd
 import copy
 import linux.linux_utils
 import os
-import parsers.link_info_parser as lp
+import xml_parsers.link_info_parser as lp
 
 
 class Link:
@@ -91,3 +91,4 @@ class Link:
 
     def clean_link(self):
         self.bridge.cleanup_bridge()
+

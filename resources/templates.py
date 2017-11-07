@@ -18,6 +18,9 @@ class Templates:
     def number(self):
         return len(self.templates)
 
+    def add_template(self):
+        pass
+
 
 class OSTemplates(Templates):
     def __init__(self):

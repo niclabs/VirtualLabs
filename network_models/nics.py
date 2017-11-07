@@ -1,4 +1,4 @@
-from config.default_names import default_nic
+from config.default_values import default_nic
 from network_models.nic import NIC
 
 

@@ -2,7 +2,10 @@ import terminal
 import router
 import switch
 import link
-from parsers.network_parser import NetworkParser
+from xml_parsers.network_parser import NetworkParser
+from checkers.guest_checker import GuestChecker
+from checkers.nic_checker import NICChecker
+from checkers.link_checker import LinkChecker
 
 
 guests_types = {
@@ -17,6 +20,9 @@ class Network:
         self.name = name
         self.guests = {}
         self.links = {}
+        self.guest_checker = GuestChecker()
+        self.nic_checker = NICChecker()
+        self.link_checker = LinkChecker()
 
     def to_xml(self):
         xml = {}
@@ -28,10 +34,11 @@ class Network:
 
         for g_id in net_dic['guests'].keys():
             guest = net_dic['guests'][g_id]
-            self.guests[g_id] = guests_types[guest['type']](guest)
+            self.create_guest(guest, g_id)
 
         for l_id in net_dic['links'].keys():
             l = net_dic['links'][l_id]
+            self.link_checker.check_link(l)
             self.links[l_id] = link.Link(l_id, l, self.guests)
 
     def list_hosts(self):
@@ -75,17 +82,15 @@ class Network:
         if guest_id < 0:
             guest_id = max(self.guests.keys()) + 1
 
-        new_guest = guests_types[guest_dic['type']](guest_dic)
-        self.guests[guest_id] = new_guest
+        return self.create_guest(guest_dic, guest_id)
 
-        return new_guest
+    def create_guest(self, guest, g_id):
+        self.guest_checker.check_guest(guest, g_id, self.nic_checker)
+        self.guests[g_id] = guests_types[guest['type']](guest)
 
-    def add_guest_online(self, guest_dic, guest_id=-1):
-        new_guest = self.add_guest(guest_dic, guest_id)
-        new_guest.power_on()
+        return self.guests[g_id]
 
-
-
+    def create_link(self, link, link_id):
 
 
 

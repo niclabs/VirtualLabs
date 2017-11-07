@@ -1,7 +1,10 @@
 default_nic = 'eth'
 
-defaul_machine = {
+default_machine = {
     'terminal': 'pc',
     'switch': 'sw',
     'router': 'rt'
 }
+
+default_type = 'terminal'
+

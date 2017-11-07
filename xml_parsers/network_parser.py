@@ -1,9 +1,9 @@
 import xmltodict as xd
 from utils.container import Container
 from copy import deepcopy
-from parsers.link_parser import LinkParser
-from parsers.guest_parser import GuestParser
-from parsers.batch_link_parser import BatchLinkParser
+from xml_parsers.link_parser import LinkParser
+from xml_parsers.guest_parser import GuestParser
+from xml_parsers.batch_link_parser import BatchLinkParser
 
 
 class NetworkParser:

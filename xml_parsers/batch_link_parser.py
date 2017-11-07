@@ -1,4 +1,4 @@
-from parsers.link_info_parser import LinkInfoParser
+from xml_parsers.link_info_parser import LinkInfoParser
 
 
 class BatchLinkParser:
