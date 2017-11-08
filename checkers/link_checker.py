@@ -28,22 +28,20 @@ class LinkChecker:
         elif 'name' in guest:
             if guest['name'] not in self.guest_names.keys():
                 raise ValueError("Trying to create an endpoint with a non existant guest")
-            nic_info = self.guest_list[self.guest_names[endpoint['name']]]['nics']
+            nic_info = self.guest_list[self.guest_names[guest['name']]]['nics']
         else:
             raise ValueError("An endpoints needs an associated guest")
 
         return nic_info
 
-
-    def check_link_nic(self, nic):
-        if '@id' in e['link_nic']:
-            if int(e['link_nic']['@id']) >= len(nic_info):
+    def check_link_nic(self, nic, nic_info):
+        if 'id' in nic:
+            if int(nic['id']) >= len(nic_info):
                 raise ValueError("Can not connect using a non existent nic")
-            nic = nic_info[int(e['link_nic']['@id'])]
-        elif '@name' in e['link_nic']:
+        elif 'name' in nic:
+            found_nic = ''
             for n in nic_info:
-                if n.interface == e['link_nic']['@name']:
-                    nic = n
-
-            if not nic:
+                if n.interface == nic['name']:
+                    found_nic = n
+            if not found_nic:
                 raise ValueError("Can not connect using a non existent nic")

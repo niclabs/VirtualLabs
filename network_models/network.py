@@ -38,8 +38,7 @@ class Network:
 
         for l_id in net_dic['links'].keys():
             l = net_dic['links'][l_id]
-            self.link_checker.check_link(l)
-            self.links[l_id] = link.Link(l_id, l, self.guests)
+            self.create_link(l, l_id)
 
     def list_hosts(self):
         return self.guests
@@ -67,12 +66,12 @@ class Network:
         for k, v in self.guests.items():
             v.delete_guest()
 
-    def connect_guests(self, info_guest1, info_guest2, link_settings={}):
+    def connect_guests(self, endpoints, link_settings={}):
         link_id = max(self.links.keys()) + 1
 
-        l = {'settings': link_settings, 'endpoints': [info_guest1, info_guest2]}
-        self.links[link_id] = link.Link(link_id, l, self.guests)
-        self.links[link_id].connect_guests()
+        l = {'settings': link_settings, 'endpoints': endpoints}
+        new_link = self.create_link(l, link_id)
+        new_link.connect_guests()
 
     def disconnect_guests(self, link_id):
         self.links[link_id].destroy_link()
@@ -90,8 +89,11 @@ class Network:
 
         return self.guests[g_id]
 
-    def create_link(self, link, link_id):
+    def create_link(self, link_info, link_id):
+        self.link_checker.check_link(link_info)
+        self.links[link_id] = link.Link(link_id, link_info, self.guests)
 
+        return self.links[link_id]
 
 
 

@@ -11,4 +11,10 @@ class TemplateParser:
         if '@id' in template_dic:
             dic['id'] = int(template_dic['id'])
 
+        if '@ram' in template_dic:
+            dic['ram'] = int(template_dic['ram'])
+
+        if '@cores' in template_dic:
+            dic['cores'] = int(template_dic['cores'])
+
         return dic
