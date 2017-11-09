@@ -7,6 +7,7 @@ from checkers.vm_checker import VirtualMachineChecker
 from kvm_models.memory_manager import MemoryManager
 
 
+
 class VirtualMachineManager:
     def __init__(self):
         with open(vm_base_xml, 'r') as f:
@@ -28,8 +29,15 @@ class VirtualMachineManager:
         else:
             new_vm_dic['domain']['vcpu'] = default_cores
 
-        memory_settings = {'name': settings['name'] + '.'}
+        if 'memory' in settings:
+            memory_size = settings['size']
+        else:
+            memory_size = default_memory_size
 
+        memory_settings = {'name': settings['name'], 'size': memory_size}
+        memory_path = self.memory_manager.create_volume(memory_settings)
+
+        new_vm_dic['domain']['devices']['disk'][0]['source']['@file'] = memory_path
         new_vm_dic['domain']['devices']['disk'][1]['source']['@file'] = settings['iso_path']
 
         return xd.unparse(new_vm_dic)
@@ -37,7 +45,7 @@ class VirtualMachineManager:
     def create_new_vm(self, vm_settings):
         self.vm_checker.check_vm(vm_settings)
         xml = self.define_xml(vm_settings)
-        machine = connection.defineXML(xml)
+        machine = connection.createFromXML(xml)
         return machine
 
     @staticmethod
