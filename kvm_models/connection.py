@@ -11,10 +11,5 @@ class Connection:
     def lookupByName(self, name):
         return self.connection.lookupByName(name)
 
-    def storageLookup(self, name):
-        return self.connection.storagePoolLookupByName(name)
-
-    def createFromXML(self, xml):
-        return self.connection.defineXML(xml)
 
 

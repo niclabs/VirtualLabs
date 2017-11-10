@@ -22,10 +22,24 @@ class Network:
         self.links = {}
         self.guest_checker = GuestChecker()
         self.nic_checker = NICChecker()
-        self.link_checker = LinkChecker()
+        self.link_checker = LinkChecker(self.guest_checker, self.guests)
 
     def to_xml(self):
-        xml = {}
+        xml = {'network': {
+            '@name': self.name,
+            'guests': [],
+            'links': []
+            }
+        }
+
+        for g_id, g in self.guests.items():
+            g_dict = g.to_dict()
+            g_dict['@id'] = g_id
+
+            xml['network']['guests'].append(g_dict)
+
+        for l in self.links:
+            xml['network']['links'].append(l.to_dict())
 
     def load_from_xml(self, xml_path):
         parser = NetworkParser(xml_path)
@@ -91,7 +105,7 @@ class Network:
 
     def create_link(self, link_info, link_id):
         self.link_checker.check_link(link_info)
-        self.links[link_id] = link.Link(link_id, link_info, self.guests)
+        self.links[link_id] = link.Link(link_id, link_info, self.guests, self.guest_checker)
 
         return self.links[link_id]
 

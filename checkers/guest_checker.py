@@ -36,6 +36,19 @@ class GuestChecker:
             nic_checker.init_guest()
             nic_checker.check_nics(guest['nics'])
 
-        self.template_checker.check_template(guest['template'])
+        self.template_checker.check_template(guest['template'], guest['type'])
+
+    def get_guests_names(self):
+        return self.new_names
+
+    def add_id_to_guest(self, guest_name, guest_id):
+        self.new_names[guest_name] = guest_id
+
+    def __contains__(self, item):
+        return item in self.new_names.keys()
+
+    def get_guest(self, name):
+        return self.new_names[name]
+
 
 

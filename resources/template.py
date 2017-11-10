@@ -10,6 +10,8 @@ templates = {
 
 class Template:
     def __init__(self, template_type, info):
+        self.type = template_type
+
         if 'id' in info:
             self.name = templates[template_type].get_template(info['id'])
         elif 'name' in info:
@@ -20,5 +22,8 @@ class Template:
 
     def get_template_info(self):
         return {'max_memory': self.template.maxMemory(), 'cpus': self.template.maxVcpus()}
+
+    def get_id(self):
+        return templates[self.type].get_id(self.name)
 
 

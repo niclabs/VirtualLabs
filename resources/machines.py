@@ -32,9 +32,10 @@ class Machines:
         raw_xml = domain.XMLDesc(0)
         mac_dic = xd.parse(raw_xml, force_list={'interface'})
 
-        interfaces = mac_dic['domain']['devices']['interface']
-        for i in interfaces:
-            macs.append(str(i['mac']['@address']))
+        if 'interface' in mac_dic['domain']['devices']:
+            interfaces = mac_dic['domain']['devices']['interface']
+            for i in interfaces:
+                macs.append(str(i['mac']['@address']))
 
         return macs
 

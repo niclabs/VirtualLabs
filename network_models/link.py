@@ -9,13 +9,13 @@ import xml_parsers.link_info_parser as lp
 
 
 class Link:
-    def __init__(self, link_id, link_info, guests):
+    def __init__(self, link_id, link_info, guests, guest_checker):
         self.id = link_id
         self.settings = link_info['settings']
         self.endpoints = []
 
         for end in link_info['endpoints']:
-            self.endpoints.append(endpoint.Endpoint(end, guests))
+            self.endpoints.append(endpoint.Endpoint(end, guests, guest_checker))
 
         self.bridge = br.LinuxBridge("link" + str(self.id))
         self.initialize_parameters()
@@ -92,3 +92,5 @@ class Link:
     def clean_link(self):
         self.bridge.cleanup_bridge()
 
+    def to_dict(self):
+        pass

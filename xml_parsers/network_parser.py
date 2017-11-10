@@ -29,7 +29,7 @@ class NetworkParser:
 
                         parsed_guest = guest_parser.parse_guest(elem)
                         self.guests_ids.add_element_with_id(parsed_guest, elem_id)
-                        guest_parser.add_id_to_guest(parsed_guest['name'], elem_id)
+
                 else:
                     for i in range(0, copies):
                         elem_id = int(self.guests_ids.next_id) + i
@@ -46,7 +46,7 @@ class NetworkParser:
                 else:
                     self.guests_ids.add_element(parsed_guest)
 
-        link_parser = LinkParser(guest_parser.get_guests_names(), self.guests_ids.get_dict())
+        link_parser = LinkParser()
         batch_link_parser = BatchLinkParser(self.guests_ids.get_dict())
 
         if 'batch_link' in self.net_dict['network']['links']:

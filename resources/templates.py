@@ -38,6 +38,9 @@ class Templates:
     def recompute_available(self):
         self.templates = self.get_template_list()
 
+    def get_id(self, name):
+        return self.templates.index(name)
+
 
 class OSTemplates(Templates):
     def __init__(self):

@@ -9,3 +9,12 @@ class NIC:
 
         self.interface = nic_info['name']
         self.mac_address = nic_info['mac']
+
+    def to_dict(self):
+        dic = {'nic': {
+                'name': self.interface,
+                'mac': self.mac_address
+            }
+        }
+
+        return dic

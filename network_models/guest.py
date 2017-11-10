@@ -19,6 +19,9 @@ class Guest:
     def power_on(self):
         subprocess.call(['virsh', 'start', self.name])
 
+    def type(self):
+        pass
+
     def power_off(self):
         subprocess.call(['virsh', 'shutdown', self.name])
 
@@ -41,7 +44,21 @@ class Guest:
         subprocess.call(['virsh', 'vol-delete', '--pool', 'default',
                          '/var/lib/libvirt/images/' + self.name + '.qcow2'])
 
+    def to_dict(self):
+        dic = {'guest': {
+            '@id': 0,
+            '@type': self.type(),
+            'name': self.name,
+            'template': {
+                '@id': self.template.get_id()
+            },
+            'nics': []}
+        }
 
+        for n in self.nics:
+            dic['guest']['nics'].append(n.to_dict())
+
+        return dic
 
 
 

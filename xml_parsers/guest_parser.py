@@ -21,11 +21,11 @@ class GuestParser:
 
         nics = []
         if 'nics' in guest_dic:
-            nics.append(self.nic_parser.parse_nics(guest_dic['nics']))
-
-        if 'number' in guest_dic:
-            number = int(guest_dic['nics']['number'])
-            nics.append([{} for i in range(0, number)])
+            if 'nic' in guest_dic['nics']:
+                nics.extend(self.nic_parser.parse_nics(guest_dic['nics']['nic']))
+            if 'number' in guest_dic['nics']:
+                number = int(guest_dic['nics']['number'])
+                nics.extend([{} for i in range(0, number)])
 
         guest['nics'] = nics
         return guest

@@ -1,6 +1,6 @@
 class LinkChecker:
-    def __init__(self, guest_name_list, guest_list):
-        self.guest_names = guest_name_list
+    def __init__(self, guest_checker, guest_list):
+        self.guest_checker = guest_checker
         self.guest_list = guest_list
 
     def check_link(self, link_dic):
@@ -24,11 +24,11 @@ class LinkChecker:
         if 'id' in guest:
             if int(guest['id']) not in self.guest_list.keys():
                 raise ValueError("Trying to create an endpoint with a non existant guest")
-            nic_info = self.guest_list[guest['id']]
+            nic_info = self.guest_list[guest['id']].nics
         elif 'name' in guest:
-            if guest['name'] not in self.guest_names.keys():
+            if guest['name'] not in self.guest_checker:
                 raise ValueError("Trying to create an endpoint with a non existant guest")
-            nic_info = self.guest_list[self.guest_names[guest['name']]]['nics']
+            nic_info = self.guest_list[self.guest_checker.get_guest(guest['name'])].nics
         else:
             raise ValueError("An endpoints needs an associated guest")
 
