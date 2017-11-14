@@ -25,9 +25,10 @@ class LinuxBridge:
 
     def add_delay(self, delay_dic):
         if delay_dic:
-            command = self.qdisc_array() + ['delay', str(delay_dic['value']), str(delay_dic['ran']), str(delay_dic['corr'])]
+            command = self.qdisc_array() + ['delay', str(delay_dic['value']), str(delay_dic['random_variation']),
+                                            str(delay_dic['correlation'])]
             if delay_dic['dist']:
-                command += ['distribution', str(delay_dic['dist'])]
+                command += ['distribution', str(delay_dic['distribution'])]
 
             subprocess.call(command)
 
@@ -58,7 +59,7 @@ class LinuxBridge:
 
     def add_gap_reordering(self, gap_dic):
         if gap_dic:
-            command = self.qdisc_array() + ['gap', str(gap_dic['pac']), 'delay', str(gap_dic['delay'])]
+            command = self.qdisc_array() + ['gap', str(gap_dic['packet']), 'delay', str(gap_dic['delay'])]
             subprocess.call(command)
 
     def remove_gap_reordering(self):
@@ -66,18 +67,19 @@ class LinuxBridge:
 
     def add_reordering(self, reor_dic):
         if reor_dic:
-            command = self.qdisc_array() + ['delay', str(reor_dic['delay']), 'reorder', str(reor_dic['prob']),
-                                            str(reor_dic['corr'])]
+            command = self.qdisc_array() + ['delay', str(reor_dic['delay']), 'reorder', str(reor_dic['probability']),
+                                            str(reor_dic['correlation'])]
             subprocess.call(command)
 
     def remove_reordering(self):
         self.add_reordering({'delay': 0})
 
-    def add_max_bandwidth(self):
-        pass
+    def add_max_bandwidth(self, bandwidth_dic):
+        subprocess.call(['wondershaper', self.name, bandwidth_dic['down'], bandwidth_dic['up']])
 
     def reset_bandwidth(self):
-        pass
+        subprocess.call(['wondershaper', 'clear', self.name])
+
 
 
 

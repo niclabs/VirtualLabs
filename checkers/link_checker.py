@@ -1,3 +1,6 @@
+from checkers.link_info_checker import LinkInfoChecker
+
+
 class LinkChecker:
     def __init__(self, guest_checker, guest_list):
         self.guest_checker = guest_checker
@@ -19,6 +22,9 @@ class LinkChecker:
 
             nic_info = self.check_link_guest(e['guest'])
             self.check_link_nic(e['nic'], nic_info)
+
+        if 'settings' in link_dic:
+            LinkInfoChecker.check_settings(link_dic['settings'])
 
     def check_link_guest(self, guest):
         if 'id' in guest:

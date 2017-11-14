@@ -9,10 +9,14 @@ class LinkInfoParser:
         if 'delay' in self.settings:
             delay = self.settings['delay']
 
-            delay_dic['value'] = delay['value'] if 'value' in delay else 0
-            delay_dic['ran'] = delay['random_variation'] if 'random_variation' in delay else 0
-            delay_dic['corr'] = delay['correlation'] if 'correlation' in delay else 0
-            delay_dic['dist'] = delay['distribution'] if 'distribution' in delay else ''
+            if 'value' in delay:
+                delay_dic['value'] = str(delay['value'])
+            if 'random_variation' in delay:
+                delay_dic['random_variation'] = str(delay['random_variation'])
+            if 'correlation' in delay:
+                delay_dic['correlation'] = str(delay['correlation'])
+            if 'distribution' in delay:
+                delay_dic['dist'] = str(delay['distribution'])
 
         return delay_dic
 
@@ -22,25 +26,40 @@ class LinkInfoParser:
         if 'loss' in self.settings:
             loss = self.settings['loss']
 
-            loss_dic['value'] = int(loss['value']) if 'value' in loss else 0
-            loss_dic['ran'] = int(loss['random_variation']) if 'random_variation' in loss else 0
+            if 'value' in loss:
+                loss_dic['value'] = str(loss['value'])
+
+            if 'random_variation' in loss:
+                loss_dic['random_variation'] = str(loss['random_variation'])
 
         return loss_dic
 
     def parse_bandwidth(self):
-        pass
+        bandwidth_dic = {}
+
+        if 'bandwidth' in self.settings:
+            if 'speed' in self.settings['bandwidth']:
+                bandwidth_dic['speed'] = str(self.settings['bandwidth']['speed'])
+
+            if 'up' in self.settings['bandwidth']:
+                bandwidth_dic['up'] = str(self.settings['bandwidth']['up'])
+
+            if 'down' in self.settings['bandwidth']:
+                bandwidth_dic['down'] = str(self.settings['bandwidth']['down'])
+
+        return bandwidth_dic
 
     def parse_duplication(self):
         dup = 0
         if 'duplication' in self.settings:
-            dup = self.settings['duplication']
+            dup = str(self.settings['duplication'])
 
         return dup
 
     def parse_corruption(self):
         cor = 0
         if 'corruption' in self.settings:
-            cor = self.settings['corruption']
+            cor = str(self.settings['corruption'])
 
         return cor
 
@@ -50,8 +69,11 @@ class LinkInfoParser:
         if 'gap' in self.settings:
             gap = self.settings['gap']
 
-            gap_dic['pac'] = gap['pac_index'] if 'pac_index' in gap else 0
-            gap_dic['delay'] = gap['delay'] if 'delay' in gap else 0
+            if 'pac_index' in gap:
+                gap_dic['packet'] = int(gap['pac_index'])
+
+            if 'delay' in gap:
+                gap_dic['delay'] = str(gap['delay'])
 
         return gap_dic
 
@@ -61,9 +83,14 @@ class LinkInfoParser:
         if 'reordering' in self.settings:
             reor = self.settings['reordering']
 
-            reor_dic['delay'] = reor['delay'] if 'delay' in reor else 0
-            reor_dic['prob'] = reor['probability'] if 'probability' in reor else 0
-            reor_dic['corr'] = reor['correlation'] if 'correlation' in reor else 0
+            if 'delay' in reor:
+                reor_dic['delay'] = str(reor['delay'])
+
+            if 'probability' in reor:
+                reor_dic['probability'] = str(reor['probability'])
+
+            if 'correlation' in reor:
+                reor_dic['correlation'] = str(reor['correlation'])
 
         return reor_dic
 

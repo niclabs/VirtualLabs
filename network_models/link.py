@@ -5,13 +5,17 @@ import xmltodict as xd
 import copy
 import linux.linux_utils
 import os
-import xml_parsers.link_info_parser as lp
 
 
 class Link:
     def __init__(self, link_id, link_info, guests, guest_checker):
         self.id = link_id
-        self.settings = link_info['settings']
+
+        if 'settings' in link_info:
+            self.settings = link_info['settings']
+        else:
+            self.settings = {}
+
         self.endpoints = []
 
         for end in link_info['endpoints']:
@@ -76,15 +80,26 @@ class Link:
         os.remove(filename)
 
     def initialize_parameters(self):
-        parser = lp.LinkInfoParser(self.settings)
-        parameters = parser.get_all_parsed()
+        if 'reordering' in self.settings:
+            self.bridge.add_reordering(self.settings['reordering'])
 
-        self.bridge.add_reordering(parameters['reordering'])
-        self.bridge.add_delay(parameters['delay'])
-        self.bridge.add_loss(parameters['loss'])
-        self.bridge.add_gap_reordering(parameters['gap'])
-        self.bridge.add_corruption(parameters['corruption'])
-        self.bridge.add_duplication(parameters['duplication'])
+        if 'delay' in self.settings:
+            self.bridge.add_delay(self.settings['delay'])
+
+        if 'loss' in self.settings:
+            self.bridge.add_loss(self.settings['loss'])
+
+        if 'gap' in self.settings:
+            self.bridge.add_gap_reordering(self.settings['gap'])
+
+        if 'corruption' in self.settings:
+            self.bridge.add_corruption(self.settings['corruption'])
+
+        if 'duplication' in self.settings:
+            self.bridge.add_duplication(self.settings['duplication'])
+
+        if 'bandwidth' in self.settings:
+            self.bridge.add_max_bandwidth(self.settings['bandwidth'])
 
     def link_condition(self):
         pass
