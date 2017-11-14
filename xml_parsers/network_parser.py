@@ -20,6 +20,9 @@ class NetworkParser:
             for c in self.net_dict['network']['guests']['clone']:
                 copies = int(c['@copies']) if '@copies' in c else 1
 
+                if 'name' not in c:
+                    raise ValueError("Can not create a set of machines with no name")
+
                 if '@start_id' in c:
                     start_id = c['@start_id']
                     for i in range(0, copies):

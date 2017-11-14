@@ -27,7 +27,6 @@ class GuestParser:
             if 'nic' in guest_dic['nics']:
                 nics.extend(self.nic_parser.parse_nics(guest_dic['nics']['nic']))
 
-
         guest['nics'] = nics
         return guest
 

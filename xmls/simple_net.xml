@@ -34,7 +34,7 @@
 			<endpoints>
 				<endpoint> 
 					<link_guest id="0"/>
-					<link_nic id="0"/>
+					<link_nic name="eth0"/>
 				</endpoint>
 				<endpoint>
 					<link_guest id="2"/>

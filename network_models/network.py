@@ -41,7 +41,7 @@ class Network:
         for l in self.links:
             xml['network']['links'].append(l.to_dict())
 
-    def load_from_xml(self, xml_path):
+    def create_from_xml(self, xml_path):
         parser = NetworkParser(xml_path)
 
         net_dic = parser.get_parsed_network()

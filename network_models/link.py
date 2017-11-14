@@ -108,4 +108,10 @@ class Link:
         self.bridge.cleanup_bridge()
 
     def to_dict(self):
-        pass
+        dic = {'settings': self.settings,
+               'endpoints': []}
+
+        for e in self.endpoints:
+            dic['endpoints'].append({'endpoint': e.})
+
+
