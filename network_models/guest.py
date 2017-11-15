@@ -1,20 +1,25 @@
 import subprocess
 import nic
-from resources.template import Template
+from resources.template import Template, NullTemplate
 from network_models.nics import NICs
 
 
 class Guest:
-    def __init__(self, info):
-        self.name = info['name']
-        self.template = Template(info['type'], info['template'])
+    def __init__(self, lab_name, info):
+        self.name = lab_name + "_" + info['name']
+
+        if 'template' in info:
+            self.template = Template(info['type'], info['template'])
+        else:
+            self.template = NullTemplate()
         self.nics = NICs(info['nics']).create_nics()
 
     def create_guest(self):
-        subprocess.call(['virt-clone', '--connect', 'qemu:///system',
-                         '--original', self.template.name, '--name', self.name,
-                         '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2',
-                         '--check', 'path_exists=off'])
+        if not self.template.is_null():
+            subprocess.call(['virt-clone', '--connect', 'qemu:///system',
+                             '--original', self.template.name, '--name', self.name,
+                             '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2',
+                             '--check', 'path_exists=off'])
 
     def power_on(self):
         subprocess.call(['virsh', 'start', self.name])
@@ -49,11 +54,11 @@ class Guest:
             '@id': 0,
             '@type': self.type(),
             'name': self.name,
-            'template': {
-                '@id': self.template.get_id()
-            },
             'nics': []}
         }
+
+        if not self.template.is_null():
+            dic['template'] = {'@id': self.template.get_id()}
 
         for n in self.nics:
             dic['guest']['nics'].append(n.to_dict())

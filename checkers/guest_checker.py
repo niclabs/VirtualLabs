@@ -5,7 +5,8 @@ from checkers.template_checker import TemplateChecker
 
 
 class GuestChecker:
-    def __init__(self):
+    def __init__(self, lab_name):
+        self.lab_name = lab_name
         self.original_names = Host.list_existing_machines()
         self.new_names = {}
         self.template_checker = TemplateChecker()
@@ -16,6 +17,18 @@ class GuestChecker:
 
         if guest['type'] not in machines_types:
             raise ValueError("Trying to create a non existing machine type")
+
+        if 'template' in guest:
+            self.template_checker.check_template(guest['template'], guest['type'])
+
+        if 'template' not in guest and 'name' not in guest:
+            raise ValueError("Can not use a base machine with no name")
+
+        if 'template' not in guest:
+            base_name = self.lab_name + "_" + guest['name']
+
+            if base_name not in self.original_names:
+                raise ValueError("Can not use a non existent machine as base")
 
         if 'name' not in guest:
             guest['name'] = default_machine[guest['type']] + str(guest_id)
@@ -29,14 +42,9 @@ class GuestChecker:
         if str(guest['name']).startswith('template_'):
             raise ValueError("Can not name a machine as template")
 
-        if 'template' not in guest:
-            raise ValueError("Each machine must be created from a template")
-
         if 'nics' in guest:
             nic_checker.init_guest()
             nic_checker.check_nics(guest['nics'])
-
-        self.template_checker.check_template(guest['template'], guest['type'])
 
     def get_guests_names(self):
         return self.new_names

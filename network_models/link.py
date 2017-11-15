@@ -8,7 +8,7 @@ import os
 
 
 class Link:
-    def __init__(self, link_id, link_info, guests, guest_checker):
+    def __init__(self, lab_name, link_id, link_info, guests, guest_checker):
         self.id = link_id
 
         if 'settings' in link_info:
@@ -21,7 +21,7 @@ class Link:
         for end in link_info['endpoints']:
             self.endpoints.append(endpoint.Endpoint(end, guests, guest_checker))
 
-        self.bridge = br.LinuxBridge("link" + str(self.id))
+        self.bridge = br.LinuxBridge(lab_name + "_link" + str(self.id))
         self.initialize_parameters()
 
     def connect_guests(self):
@@ -112,6 +112,8 @@ class Link:
                'endpoints': []}
 
         for e in self.endpoints:
-            dic['endpoints'].append({'endpoint': e.})
+            dic['endpoints'].append({'endpoint': e.to_dict()})
+
+        return dic
 
 

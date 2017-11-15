@@ -26,4 +26,13 @@ class Template:
     def get_id(self):
         return templates[self.type].get_id(self.name)
 
+    def is_null(self):
+        return False
 
+
+class NullTemplate:
+    def __init__(self):
+        pass
+
+    def is_null(self):
+        return True

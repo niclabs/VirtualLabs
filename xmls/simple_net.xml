@@ -1,5 +1,4 @@
 <network>
-	<name>simple_net</name>
 	<guests>
 		<guest id="0" type="terminal">
 			<name>pc1</name>

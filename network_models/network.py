@@ -6,6 +6,8 @@ from xml_parsers.network_parser import NetworkParser
 from checkers.guest_checker import GuestChecker
 from checkers.nic_checker import NICChecker
 from checkers.link_checker import LinkChecker
+import xmltodict as xd
+import linux.linux_utils
 
 
 guests_types = {
@@ -16,7 +18,7 @@ guests_types = {
 
 
 class Network:
-    def __init__(self, name=""):
+    def __init__(self, name):
         self.name = name
         self.guests = {}
         self.links = {}
@@ -24,9 +26,8 @@ class Network:
         self.nic_checker = NICChecker()
         self.link_checker = LinkChecker(self.guest_checker, self.guests)
 
-    def to_xml(self):
+    def to_xml(self, filename):
         xml = {'network': {
-            '@name': self.name,
             'guests': [],
             'links': []
             }
@@ -40,6 +41,10 @@ class Network:
 
         for l in self.links:
             xml['network']['links'].append(l.to_dict())
+
+        xml_file = linux.linux_utils.touch(filename)
+        xd.unparse(xml, xml_file, pretty=True)
+        xml_file.close()
 
     def create_from_xml(self, xml_path):
         parser = NetworkParser(xml_path)
@@ -67,6 +72,10 @@ class Network:
         for k, v in self.guests.items():
             v.power_on()
 
+    def turn_network_off(self):
+        for k, v in self.guests.items():
+            v.power_off()
+
     def construct_topology(self):
         for key, value in self.guests.items():
             value.create_guest()
@@ -77,8 +86,6 @@ class Network:
     def clean_up_topology(self):
         for k, v in self.links.items():
             v.clean_up()
-        for k, v in self.guests.items():
-            v.delete_guest()
 
     def connect_guests(self, endpoints, link_settings={}):
         link_id = max(self.links.keys()) + 1
@@ -99,13 +106,13 @@ class Network:
 
     def create_guest(self, guest, g_id):
         self.guest_checker.check_guest(guest, g_id, self.nic_checker)
-        self.guests[g_id] = guests_types[guest['type']](guest)
+        self.guests[g_id] = guests_types[guest['type']](self.name, guest)
 
         return self.guests[g_id]
 
     def create_link(self, link_info, link_id):
         self.link_checker.check_link(link_info)
-        self.links[link_id] = link.Link(link_id, link_info, self.guests, self.guest_checker)
+        self.links[link_id] = link.Link(self.name, link_id, link_info, self.guests, self.guest_checker)
 
         return self.links[link_id]
 
