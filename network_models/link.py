@@ -8,7 +8,7 @@ import os
 
 
 class Link:
-    def __init__(self, lab_name, link_id, link_info, guests, guest_checker):
+    def __init__(self, link_id, link_info, guests, guest_checker, bridge_name):
         self.id = link_id
 
         if 'settings' in link_info:
@@ -21,12 +21,8 @@ class Link:
         for end in link_info['endpoints']:
             self.endpoints.append(endpoint.Endpoint(end, guests, guest_checker))
 
-        self.bridge = br.LinuxBridge(lab_name + "_link" + str(self.id))
+        self.bridge = br.LinuxBridge(bridge_name)
         self.initialize_parameters()
-
-    def connect_guests(self):
-        self.connect_guest(0)
-        self.connect_guest(1)
 
     def write_endpoint_xml(self, i):
         xml = {'interface': {
@@ -68,11 +64,6 @@ class Link:
 
     def clean_up(self):
         subprocess.call(['brctl', 'delbr', self.bridge.name])
-
-    def destroy_link(self):
-        self.detach_link(0)
-        self.detach_link(1)
-        self.clean_up()
 
     def detach_link(self, index):
         filename = self.write_endpoint_xml(index)

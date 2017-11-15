@@ -63,6 +63,10 @@ class NetworkParser:
                 parsed_link = link_parser.parse_link(l)
                 self.links_ids.add_element(parsed_link)
 
+        if 'external_link' in self.net_dict['network']['links']:
+            for l in self.net_dict['network']['links']['external_link']:
+
+
         return {'guests': self.guests_ids.get_dict(), 'links': self.links_ids.get_dict()}
 
     def get_parsed_network(self):

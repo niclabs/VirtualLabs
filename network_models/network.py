@@ -68,6 +68,10 @@ class Network:
     def get_guest(self, guest_id):
         return self.guests[guest_id]
 
+    def get_guest_by_name(self, guest_name):
+        guest_id = self.guest_checker.get_guest(guest_name)
+        return self.get_guest(guest_id)
+
     def turn_network_on(self):
         for k, v in self.guests.items():
             v.power_on()
