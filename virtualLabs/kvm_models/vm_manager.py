@@ -7,10 +7,18 @@ from vm_defaults import *
 
 
 class VirtualMachineManager:
+    """ In charge of managing the creation and destruction of virtual machines
+    Attributes:
+        vm_checker (VirtualMachineChecker): Instance of the class that checks the correctitude of the data used
+                                            to create the VM
+    """
     def __init__(self):
         self.vm_checker = VirtualMachineChecker()
 
     def create_new_vm(self, vm_settings):
+        """ Creates a new virtual machine (not from a template, but from an image file)
+        :param vm_settings: Settings for the new virtual machine
+        """
         self.vm_checker.check_vm(vm_settings)
 
         if 'ram' in vm_settings:
@@ -34,6 +42,9 @@ class VirtualMachineManager:
 
     @staticmethod
     def destroy_vm(machine_name):
+        """ Deletes a virtual machine
+        :param machine_name: Name of the machine to delete
+        """
         try:
             machine = connection.lookupByName(machine_name)
             machine.undefine()

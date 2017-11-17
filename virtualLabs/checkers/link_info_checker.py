@@ -1,13 +1,21 @@
 class LinkInfoChecker:
+    """ Checks and fills (in case there are blank properties) the settings for a link. Includes properties such as
+    delay, loss, bandwidth, etc.
+    """
     def __init__(self):
         pass
 
     def check_settings(self, settings):
+        """ Checks the information for a link settings, filling the blank properties and appending the required measure
+        units.
+        :param settings: Dictionary with the link settings inputted by the user
+        """
         if 'delay' in settings:
             delay = settings['delay']
 
             settings['delay']['value'] = self.append_miliseconds(delay['value']) if 'value' in delay else '0ms'
-            settings['delay']['random_variation'] = self.append_percentage(delay['random_variation']) if 'random_variation' in delay else '0%'
+            settings['delay']['random_variation'] = self.append_percentage(delay['random_variation']) \
+                if 'random_variation' in delay else '0%'
             settings['delay']['corr'] = self.append_percentage(delay['correlation']) if 'correlation' in delay else '0%'
             settings['delay']['distribution'] = delay['distribution'] if 'distribution' in delay else ''
 
@@ -50,18 +58,30 @@ class LinkInfoChecker:
 
     @staticmethod
     def append_percentage(value):
+        """ Appends a % at the end of a given value if it is not included
+        :param value: String to check
+        :return: Value with % appended at the end
+        """
         if not value.endswith('%'):
             value += '%'
         return value
 
     @staticmethod
     def append_miliseconds(value):
+        """ Appends a ms at the end of a given value if it is not included
+        :param value: String to check
+        :return: Value with ms appended at the end
+        """
         if not value.endswith('ms'):
             value += 'ms'
         return value
 
     @staticmethod
     def append_rate(value):
+        """ Appends a kpbs at the end of a given value if it is not included
+        :param value: String to check
+        :return: Value with kbps appended at the end
+        """
         if not value.endswith('kbps'):
             value += 'kbps'
         return value
