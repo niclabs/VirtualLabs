@@ -1,4 +1,4 @@
-from virtualLabs.lab_models.db.text_file_wrapper import TextFileController
+from virtualLabs.lab.db.text_file_wrapper import TextFileController
 
 
 class LabDBController:

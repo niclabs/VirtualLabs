@@ -27,9 +27,6 @@ class LinkChecker:
         if 'endpoints' not in link_dic:
             raise ValueError("Can not define a link without endpoints")
 
-        if len(link_dic['endpoints']) is not 2:
-            raise ValueError("A link must have exactly two endpoints")
-
         for e in link_dic['endpoints']:
             if 'guest' not in e:
                 raise ValueError("Can not create a link with no guest at endpoint")

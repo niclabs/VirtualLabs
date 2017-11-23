@@ -3,6 +3,12 @@ from virtualLabs.network_models.nic import NIC
 
 
 class NICs:
+    """In charge of creating all NICs instances for a guest, making
+    sure that no names or MAC collision
+    Attributes:
+        nics: NIC information (that will be used to create the NIC instances)
+
+    """
     def __init__(self, nics):
         self.nics = nics
         self.used_names = []

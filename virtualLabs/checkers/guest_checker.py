@@ -11,13 +11,16 @@ class GuestChecker:
         original_names(list: str): List of the machines previously existent in the host
         new_names(dict: name, int): Dictionary with the names of the laboratory's guest and their ids
     """
-    def __init__(self, lab_name):
+    def __init__(self):
+        self.lab_name = ""
+        self.original_names = Machines.list_existing_machines()
+        self.new_names = {}
+
+    def name_lab(self, lab_name):
         """
         :param lab_name: Name of the laboratory the check guests belong to
         """
         self.lab_name = lab_name
-        self.original_names = Machines.list_existing_machines()
-        self.new_names = {}
 
     def check_guest(self, guest, guest_id, nic_checker):
         """

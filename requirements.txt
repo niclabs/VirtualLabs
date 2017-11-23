@@ -1,0 +1,3 @@
+xmltodict==0.11.0
+netifaces==0.10.4
+pynetlinux==1.1

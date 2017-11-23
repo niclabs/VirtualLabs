@@ -10,13 +10,17 @@ from virtualLabs.xml_parsers.network_parser import NetworkParser
 
 
 class Network:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = ""
         self.guests = {}
         self.links = {}
         self.guest_checker = GuestChecker()
         self.nic_checker = NICChecker()
         self.link_checker = LinkChecker(self.guest_checker, self.guests)
+
+    def name_network(self, name):
+        self.name = name
+        self.guest_checker.name_lab(self.name)
 
     def to_xml(self, filename):
         xml = {'network': {
@@ -45,7 +49,7 @@ class Network:
 
         for g_id in net_dic['guests'].keys():
             guest = net_dic['guests'][g_id]
-            self.create_guest(guest, g_id)
+            self.add_guest(guest, g_id)
 
         for l_id in net_dic['links'].keys():
             l = net_dic['links'][l_id]
@@ -83,7 +87,13 @@ class Network:
         for k, v in self.links.items():
             v.clean_up()
 
-    def connect_guests(self, endpoints, link_settings={}):
+    def connect_guests(self, link_info):
+        self.link_checker.check_link(link_info)
+        settings = link_info['settings'] if 'settings' in link_info else {}
+
+        self.connect_guests_parse(link_info, settings)
+
+    def connect_guests_parse(self, endpoints, link_settings):
         link_id = max(self.links.keys()) + 1
 
         l = {'settings': link_settings, 'endpoints': endpoints}
@@ -94,20 +104,19 @@ class Network:
         self.links[link_id].destroy_link()
         self.links.pop(link_id)
 
-    def add_guest(self, guest_dic, guest_id=-1):
+    def create_guest(self, guest_dic, guest_id=-1):
         if guest_id < 0:
             guest_id = max(self.guests.keys()) + 1
 
-        return self.create_guest(guest_dic, guest_id)
+        return self.add_guest(guest_dic, guest_id)
 
-    def create_guest(self, guest, g_id):
+    def add_guest(self, guest, g_id):
         self.guest_checker.check_guest(guest, g_id, self.nic_checker)
         self.guests[g_id] = gtypes.create_guest_by_type(guest, guest['type'], self.name)
 
         return self.guests[g_id]
 
     def create_link(self, link_info, link_id):
-        self.link_checker.check_link(link_info)
         self.links[link_id] = ltypes.create_link_from_type(self.name, link_id, link_info, self.guests,
                                                            self.guest_checker)
 

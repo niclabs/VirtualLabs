@@ -10,9 +10,9 @@ class TextFileController:
     """
     def __init__(self):
         self.labs = {}
-        self.get_labs_from_file()
-        self.lab_file = 'lab_models/db/labs.txt'
+        self.lab_file = 'saved_labs/labs.txt'
         self.lab_path = 'saved_labs/'
+        self.get_labs_from_file()
 
     def get_labs(self):
         """
