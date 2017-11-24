@@ -8,6 +8,13 @@ import virtualLabs.linux.linux_utils
 
 
 class Link:
+    """ Model an abstract link in a network.
+    Attributes:
+        id(int): Id number of the link
+        settings(dict): Dictionary with the properties of the link
+        endpoints(list): endpoint(s) of the link
+        bridge: Bridge instance that represents the link at a low-level
+    """
     def __init__(self, link_id, link_info, guests, guest_checker, bridge_name):
         self.id = link_id
 
@@ -25,6 +32,10 @@ class Link:
         self.initialize_parameters()
 
     def write_endpoint_xml(self, i):
+        """ Write in a file the XML required to attach the link to a guest
+        :param i: Index of the endpoint
+        :return: The name of the file where the XML was written
+        """
         xml = {'interface': {
             '@type': 'bridge',
             'source': {
@@ -54,23 +65,35 @@ class Link:
         return filename
 
     def connect_guest(self, i):
+        """ Attaches the nic to the guest and to the bridge representing the link
+        :param i: Index of the endpoint to connect
+        """
         filename = self.write_endpoint_xml(i)
         self.attach_idevice(filename, self.endpoints[i].guest.name)
 
     @staticmethod
     def attach_idevice(xml_name, guest_name):
+        """ Attaches a device to a guest
+        :param xml_name: Name of the file containing the device XML
+        :param guest_name:
+        """
         subprocess.call(['virsh', 'attach-device', guest_name, '--config', xml_name])
         os.remove(xml_name)
 
     def clean_up(self):
+        """ Deletes the resources (the bridge) associated to this link """
         subprocess.call(['brctl', 'delbr', self.bridge.name])
 
     def detach_link(self, index):
+        """ Detaches the device (hence, disconnecting) from a guest
+        :param index: Index of the endpoint to select
+        """
         filename = self.write_endpoint_xml(index)
         subprocess.call(['virsh', 'detach-device', self.endpoints[index].guest.name, '--persistent', filename])
         os.remove(filename)
 
     def initialize_parameters(self):
+        """ Sets all desired properties on the link """
         if 'reordering' in self.settings:
             self.bridge.add_reordering(self.settings['reordering'])
 
@@ -96,9 +119,13 @@ class Link:
         pass
 
     def clean_link(self):
+        """Deletes all set properties of the link"""
         self.bridge.cleanup_bridge()
 
     def to_dict(self):
+        """ Creates a dictionary with this link information, so that it can be saved
+        :return: Dictionary summarizing this link
+        """
         dic = {'settings': self.settings,
                'endpoints': []}
 

@@ -92,26 +92,38 @@ class LinuxBridge:
         self.add_corruption(0)
 
     def add_gap_reordering(self, gap_dic):
+        """ Adds the simplest form of reordering (reorder every Nth packet)
+        :param gap_dic: Dictionary with the information of the reordering
+        """
         if gap_dic:
             command = self.qdisc_array() + ['gap', str(gap_dic['packet']), 'delay', str(gap_dic['delay'])]
             subprocess.call(command)
 
     def remove_gap_reordering(self):
-        pass
+        """ Removes the gap reordering """
+        self.add_gap_reordering({})
 
     def add_reordering(self, reor_dic):
+        """ Adds random reordering to the packets
+        :param reor_dic:
+        """
         if reor_dic:
             command = self.qdisc_array() + ['delay', str(reor_dic['delay']), 'reorder', str(reor_dic['probability']),
                                             str(reor_dic['correlation'])]
             subprocess.call(command)
 
     def remove_reordering(self):
+        """ Removes the random reordering """
         self.add_reordering({'delay': 0})
 
     def add_max_bandwidth(self, bandwidth_dic):
+        """ Sets a maximum uploading and downloading bandwidth to the bridge
+        :param bandwidth_dic:
+        """
         subprocess.call(['wondershaper', self.name, bandwidth_dic['down'], bandwidth_dic['up']])
 
     def reset_bandwidth(self):
+        """ Removes the bandwidth limitation """
         subprocess.call(['wondershaper', 'clear', self.name])
 
 
