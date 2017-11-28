@@ -1,11 +1,22 @@
-from virtualLabs.xml_parsers.link_info_parser import LinkInfoParser
+from virtualLabs.xml_parsers.link_setting_parser import LinkSettingsParser
 
 
 class BatchLinkParser:
+    """ Parses a batch link XML tag
+    Attributes:
+        guest_list(list): List of the guests connected by the links
+    """
     def __init__(self, guest_list):
+        """
+        :param guest_list: List of the guests connected by the links (parsed separately)
+        """
         self.guest_list = guest_list
 
     def parse_links(self, batch_dic):
+        """ Creates the set of links represented by the batch link tag
+        :param batch_dic: Dictionary with the XML batch link tag
+        :return: Dictionay with the links represented by the batch link tag
+        """
         endpoints = [[], []]
         links = []
 
@@ -59,7 +70,7 @@ class BatchLinkParser:
 
         settings = {}
         if 'settings' in batch_dic:
-            settings = LinkInfoParser(batch_dic['settings']).get_all_parsed()
+            settings = LinkSettingsParser(batch_dic['settings']).get_all_parsed()
 
         if len(endpoints[0]) is not len(endpoints[1]):
             raise ValueError("Can not pair endpoints, number inconsistent")

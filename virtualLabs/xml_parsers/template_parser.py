@@ -1,8 +1,13 @@
 class TemplateParser:
+    """ Parses the XML tag that represents the template tag used to create a virtual machine"""
     def __init__(self):
         pass
 
     def parse_template(self, template_dic):
+        """ Parses the XML tag associated to a template tag
+        :param template_dic: Dictionary with the template XML tag
+        :return: Dictionary with the template information
+        """
         dic = {}
 
         if '@name' in template_dic:

@@ -7,13 +7,26 @@ from virtualLabs.xml_parsers.link_parser import LinkParser
 
 
 class NetworkParser:
+    """ Parses a network XML, generating dictionaries with the information formatted following the rules of the network model
+    classes.
+    Attributes:
+        net_dict(dict): Dictionary created from the network XML
+        guest_id(Container): Keeps all Guest instances and their associated ids
+        links_id(Container): Keeps all Link instances and their ids
+    """
     def __init__(self, xml_path):
+        """
+        :param xml_path: Path to the file with the XML that is to be parsed
+        """
         with open(xml_path, 'r') as f:
             self.net_dict = xd.parse(f, force_list={'guest', 'clone', 'nic', 'batch_link', 'link'})
         self.guests_ids = Container()
         self.links_ids = Container()
 
     def parse_xml(self):
+        """ Parses the XML
+        :return: Dictionary with the parsed network
+        """
         guest_parser = GuestParser()
 
         if 'clone' in self.net_dict['network']['guests']:
@@ -71,5 +84,8 @@ class NetworkParser:
         return {'guests': self.guests_ids.get_dict(), 'links': self.links_ids.get_dict()}
 
     def get_parsed_network(self):
+        """
+        :return: The parsed network as a dictionary
+        """
         return self.parse_xml()
 

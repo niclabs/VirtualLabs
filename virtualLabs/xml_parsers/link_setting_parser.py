@@ -1,9 +1,18 @@
-class LinkInfoParser:
+class LinkSettingsParser:
+    """ Parses the XML tags used to set the properties of a link
+    Attributes:
+        settings(dict): Dictionary with the information to parse
+    """
     def __init__(self, settings):
+        """
+        :param settings: Dictionary (from XML) with all settings included
+        """
         self.settings = settings
-        self.bandwidth = settings['bandwidth'] if 'bandwidth' in settings else ''
 
     def parse_delay(self):
+        """ Parses the delay tag (if it exists)
+        :return: Dictionary with the delay information
+        """
         delay_dic = {}
 
         if 'delay' in self.settings:
@@ -21,6 +30,9 @@ class LinkInfoParser:
         return delay_dic
 
     def parse_loss(self):
+        """ Parses the loss tag (if it exists)
+        :return: Dictionary with the loss information
+        """
         loss_dic = {}
 
         if 'loss' in self.settings:
@@ -35,6 +47,9 @@ class LinkInfoParser:
         return loss_dic
 
     def parse_bandwidth(self):
+        """ Parses the bandwidth tag (if it exists)
+        :return: Dictionary with the bandwidth information
+        """
         bandwidth_dic = {}
 
         if 'bandwidth' in self.settings:
@@ -50,6 +65,9 @@ class LinkInfoParser:
         return bandwidth_dic
 
     def parse_duplication(self):
+        """ Parses the duplication tag (if it exists)
+        :return: Dictionary with the duplication information
+        """
         dup = 0
         if 'duplication' in self.settings:
             dup = str(self.settings['duplication'])
@@ -57,6 +75,9 @@ class LinkInfoParser:
         return dup
 
     def parse_corruption(self):
+        """ Parses the corruption tag (if it exists)
+        :return: Dictionary with the corruption information
+        """
         cor = 0
         if 'corruption' in self.settings:
             cor = str(self.settings['corruption'])
@@ -64,6 +85,9 @@ class LinkInfoParser:
         return cor
 
     def parse_gap_reordering(self):
+        """ Parses the gap reordering tag (if it exists)
+        :return: Dictionary with the gap reordering information
+        """
         gap_dic = {}
 
         if 'gap' in self.settings:
@@ -78,6 +102,9 @@ class LinkInfoParser:
         return gap_dic
 
     def parse_reordering(self):
+        """ Parses the reordering tag (if it exists)
+        :return: Dictionary with the reordering information
+        """
         reor_dic = {}
 
         if 'reordering' in self.settings:
@@ -95,6 +122,9 @@ class LinkInfoParser:
         return reor_dic
 
     def get_all_parsed(self):
+        """
+        :return: Dictionary with all properties parsed (including empty dictionaries in those not originally included)
+        """
         return {'delay': self.parse_delay(), 'loss': self.parse_loss(), 'bandwidth': self.parse_bandwidth(),
                 'duplication': self.parse_duplication(), 'corruption': self.parse_corruption(),
                 'gap': self.parse_gap_reordering(), 'reordering': self.parse_reordering()}

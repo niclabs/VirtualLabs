@@ -83,16 +83,19 @@ class Templates:
 
 
 class OSTemplates(Templates):
+    """ Represents the set of templates that are used create a terminal (PCs)"""
     def __init__(self):
         Templates.__init__(self, 'template_os_')
 
 
 class RouterTemplates(Templates):
+    """ Represents the set of templates that are used to create a router """
     def __init__(self):
         Templates.__init__(self, 'template_router_')
 
 
 class SwitchTemplates(Templates):
+    """ Represents the set of templates that are used to create a switch """
     def __init__(self):
         Templates.__init__(self, 'template_switch_')
 

@@ -1,11 +1,16 @@
-from virtualLabs.xml_parsers.link_info_parser import LinkInfoParser
+from virtualLabs.xml_parsers.link_setting_parser import LinkSettingsParser
 
 
 class LinkParser:
+    """ Parses the XML tag related to link definition"""
     def __init__(self):
         pass
 
     def parse_link(self, link_dic):
+        """ Parses a simple (internal) link tag
+        :param link_dic: Dictionary with the XML link tag
+        :return: Dictionary with the link information
+        """
         endpoints = []
 
         for e in link_dic['endpoints']['endpoint']:
@@ -15,6 +20,10 @@ class LinkParser:
         return link
 
     def parse_external_link(self, link_dic):
+        """ Parses a external_link tag
+        :param link_dic:  Dictionary with the XML external_link tag
+        :return: Dictionary with the external link information
+        """
         endpoints = []
         for e in link_dic['endpoint']:
             endpoints.append(self.parse_endpoint(e))
@@ -23,6 +32,10 @@ class LinkParser:
         return link
 
     def parse_endpoint(self, e):
+        """ Parses one of the endpoints of a link (including guest and nic)
+        :param e: Dictionary with the endpoint information to parse
+        :return: Dictionary with the enpoint formatted as required
+        """
         nic = {}
         guest = {}
 
@@ -41,9 +54,13 @@ class LinkParser:
         return {'guest': guest, 'nic': nic}
 
     def parse_settings(self, link_dic):
+        """ Parses the tags related to the settings of the link
+        :param link_dic: Dictionary with the link information
+        :return: Dictionary with the settings information parsed
+        """
         settings = {}
         if 'settings' in link_dic:
-            settings = LinkInfoParser(link_dic['settings']).get_all_parsed()
+            settings = LinkSettingsParser(link_dic['settings']).get_all_parsed()
 
         return settings
 
