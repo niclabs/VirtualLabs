@@ -12,7 +12,7 @@ class ExternalLink(Link):
         :param guest_checker: GuestChecker instance
         """
         bridge_name = host_config.host_bridge
-        Link.__init__(link_id, link_info, guests, guest_checker, bridge_name)
+        Link.__init__(self, link_id, link_info, guests, guest_checker, bridge_name)
 
     def connect_guests(self):
         """ Initializes the connection between the two endpoints"""

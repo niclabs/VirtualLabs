@@ -79,14 +79,16 @@ class GuestChecker:
         self.new_names[guest_name] = guest_id
 
     def __contains__(self, item):
-        return item in self.new_names.keys()
+        real_name = self.lab_name + '_' + item
+        return real_name in self.new_names.keys()
 
     def get_guest(self, name):
         """
         :param name: Guest name
         :return: Id related to the guest
         """
-        return self.new_names[name]
+        real_name = self.lab_name + '_' + name
+        return self.new_names[real_name]
 
 
 

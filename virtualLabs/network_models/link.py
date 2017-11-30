@@ -54,8 +54,8 @@ class Link:
 
         xml_end = copy.deepcopy(xml)
 
-        xml_end['interface']['alias']['@name'] = self.endpoints[i].nic['name']
-        xml_end['interface']['mac']['@address'] = self.endpoints[i].nic['mac']
+        xml_end['interface']['alias']['@name'] = self.endpoints[i].nic.interface
+        xml_end['interface']['mac']['@address'] = self.endpoints[i].nic.mac_address
 
         filename = 'interface_host.xml'
         xml_file = virtualLabs.linux.linux_utils.touch(filename)
@@ -82,6 +82,7 @@ class Link:
 
     def clean_up(self):
         """ Deletes the resources (the bridge) associated to this link """
+        subprocess.call(['ip', 'link', 'set', 'dev', self.bridge.name, 'down'])
         subprocess.call(['brctl', 'delbr', self.bridge.name])
 
     def detach_link(self, index):

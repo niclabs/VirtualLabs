@@ -25,13 +25,20 @@ class Guest:
             self.template = NullTemplate()
         self.nics = NICs(info['nics']).create_nics()
 
+    def get_name(self):
+        """
+        :return: Name of the guest
+        """
+        return self.name
+
     def create_guest(self):
         """ Creates the virtual machine that belongs to the guest """
         if not self.template.is_null():
-            subprocess.call(['virt-clone', '--connect', 'qemu:///system',
-                             '--original', self.template.name, '--name', self.name,
-                             '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2',
-                             '--check', 'path_exists=off'])
+            p = subprocess.Popen(['virt-clone', '--connect', 'qemu:///system',
+                                  '--original', self.template.name, '--name', self.name,
+                                  '--file', '/var/lib/libvirt/images/' + self.name + '.qcow2'])
+            p.wait()
+
 
     def power_on(self):
         """ Turns on the guest virtual machine"""

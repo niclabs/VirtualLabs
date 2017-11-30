@@ -15,6 +15,7 @@ class LinuxBridge:
         """
         self.name = name
         self.bridge = brctl.addbr(self.name)
+        subprocess.call(['ip', 'link', 'set', 'dev', self.name, 'up'])
         subprocess.call(['tc', 'qdisc', 'add', 'dev', self.name, 'root', 'netem'])
 
     def add_interface(self, interface):

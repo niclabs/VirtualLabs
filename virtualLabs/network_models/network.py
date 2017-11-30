@@ -8,6 +8,8 @@ import virtualLabs.network_models.model_types.guest_types as gtypes
 from virtualLabs.checkers.nic_checker import NICChecker
 from virtualLabs.xml_parsers.network_parser import NetworkParser
 
+from virtualLabs.utils.functions import get_max
+
 
 class Network:
     """ Models a network (the topology of the laboratory).
@@ -51,7 +53,7 @@ class Network:
 
             xml['network']['guests'].append(g_dict)
 
-        for l in self.links:
+        for l_id, l in self.links.items():
             xml['network']['links'].append(l.to_dict())
 
         xml_file = virtualLabs.linux.linux_utils.touch(filename)
@@ -120,29 +122,36 @@ class Network:
             value.connect_guests()
 
     def clean_up_topology(self):
-        """ Disconnects the guests and deletes the bridges associated with the links """
+        """ Deletes the bridges associated with the links """
         for k, v in self.links.items():
             v.clean_up()
+
+    def create_link(self, link_info):
+        """ Creates a link in the network
+        :param link_info: Information to create the link
+        """
+        self.link_checker.check_link(link_info)
+        settings = link_info['settings'] if 'settings' in link_info else {}
+
+        return self.create_link_parse(link_info['endpoints'], settings)
+
+    def create_link_parse(self, endpoints, settings):
+        """ Creates a link receiving the endpoints and the settings
+        :param endpoints:
+        :param settings:
+        :return:
+        """
+        link_id = get_max(self.links.keys()) + 1
+
+        l = {'settings': settings, 'endpoints': endpoints}
+        return self.add_link(l, link_id)
 
     def connect_guests(self, link_info):
         """ Connects guests (either between them or with the internet)
         :param link_info: Information about the link (involved guests and nics)
         """
-        self.link_checker.check_link(link_info)
-        settings = link_info['settings'] if 'settings' in link_info else {}
-
-        self.connect_guests_parse(link_info['endpoints'], settings)
-
-    def connect_guests_parse(self, endpoints, link_settings):
-        """ Creates the link between the guests
-        :param endpoints:
-        :param link_settings: Dictionary with the link properties (empty if none given)
-        """
-        link_id = max(self.links.keys()) + 1
-
-        l = {'settings': link_settings, 'endpoints': endpoints}
-        new_link = self.add_link(l, link_id)
-        new_link.connect_guests()
+        new_link = self.create_link(link_info)
+        new_link.connects_guests()
 
     def disconnect_guests(self, link_id):
         """ Deletes a link from the network (disconnects one or two guests depending on link type)
@@ -158,7 +167,7 @@ class Network:
         :return: The created Guest instance
         """
         if guest_id < 0:
-            guest_id = max(self.guests.keys()) + 1
+            guest_id = get_max(self.guests.keys()) + 1
 
         return self.add_guest(guest_dic, guest_id)
 
@@ -170,6 +179,7 @@ class Network:
         """
         self.guest_checker.check_guest(guest, g_id, self.nic_checker)
         self.guests[g_id] = gtypes.create_guest_by_type(guest, guest['type'], self.name)
+        self.guest_checker.add_id_to_guest(self.guests[g_id].get_name(), g_id)
 
         return self.guests[g_id]
 

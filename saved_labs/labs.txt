@@ -1,3 +1,0 @@
-lab1 file1
-lab2 file2
-lab3 file3

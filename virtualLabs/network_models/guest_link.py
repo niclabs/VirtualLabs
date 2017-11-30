@@ -11,8 +11,7 @@ class GuestLink(Link):
         :param guests: List of guests of the laboratory
         :param guest_checker: GuestChecker instance
         """
-        bridge_name = lab_name + "_link" + str(self.id)
-        Link.__init__(link_id, link_info, guests, guest_checker, bridge_name)
+        Link.__init__(self, link_id, link_info, guests, guest_checker, lab_name + "_l" + str(link_id))
 
     def connect_guests(self):
         """ Initializes the connection between the two endpoints"""

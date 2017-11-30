@@ -4,6 +4,7 @@ from virtualLabs.utils.container import Container
 from virtualLabs.xml_parsers.batch_link_parser import BatchLinkParser
 from virtualLabs.xml_parsers.guest_parser import GuestParser
 from virtualLabs.xml_parsers.link_parser import LinkParser
+from virtualLabs import path
 
 
 class NetworkParser:
@@ -18,7 +19,8 @@ class NetworkParser:
         """
         :param xml_path: Path to the file with the XML that is to be parsed
         """
-        with open(xml_path, 'r') as f:
+        real_path = path + xml_path
+        with open(real_path, 'r') as f:
             self.net_dict = xd.parse(f, force_list={'guest', 'clone', 'nic', 'batch_link', 'link'})
         self.guests_ids = Container()
         self.links_ids = Container()

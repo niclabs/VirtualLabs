@@ -8,10 +8,11 @@ class TextFileController:
             lab_file (str): Path to the database file
             lab_path (str): Path to the directory where labs are saved
     """
-    def __init__(self):
+    def __init__(self, lab_path):
         self.labs = {}
-        self.lab_file = 'saved_labs/labs.txt'
-        self.lab_path = 'saved_labs/'
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.lab_path = dir_path + lab_path
+        self.lab_file = self.lab_path + 'labs.txt'
         self.get_labs_from_file()
 
     def get_labs(self):
@@ -24,14 +25,16 @@ class TextFileController:
         """ Reads the lab file and fills the lab dictionary
         """
         with open(self.lab_file, 'r') as f:
-            self.labs = dict([line.split() for line in f])
+            for line in f:
+                if len(line) > 0:
+                    self.labs = dict([line.split()])
 
     def lab_file_name(self, name):
         """
         :param name: Name of a laboratory
         :return: Path where the lab is to be saved
         """
-        return self.lab_path + name
+        return self.lab_path + name + ".xml"
 
     def save_lab(self, name, path):
         """ Include a new laboratory in the database
