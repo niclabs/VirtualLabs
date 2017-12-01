@@ -19,7 +19,7 @@ class NetworkParser:
         """
         :param xml_path: Path to the file with the XML that is to be parsed
         """
-        real_path = path +  xml_path
+        real_path = path + xml_path
         with open(real_path, 'r') as f:
             self.net_dict = xd.parse(f, force_list={'guest', 'clone', 'nic', 'batch_link', 'link'})
         self.guests_ids = Container()

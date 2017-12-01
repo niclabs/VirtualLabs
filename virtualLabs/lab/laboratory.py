@@ -19,7 +19,7 @@ class Laboratory:
         self.name = name
         self.topology = Network()
         self.db_wrapper = LabDBController()
-        self.valid = True
+        self.valid = False
         atexit.register(clean_up, self)
 
     def create_from_xml(self, lab_name, xml_path):
@@ -30,6 +30,7 @@ class Laboratory:
         self.name = lab_name
         self.topology.name_network(lab_name)
         self.topology.create_from_xml(xml_path)
+        self.valid = True
 
     def save_laboratory(self):
         """ Save the laboratory in the database"""
@@ -46,6 +47,7 @@ class Laboratory:
         self.name = lab_name
         topology_file = self.db_wrapper.load_laboratory(lab_name)
         self.topology.create_from_xml(topology_file)
+        self.valid = True
 
     def get_current_laboratory(self, lab_name):
         """ Creates a laboratory from one already defined on the host
@@ -55,6 +57,7 @@ class Laboratory:
         self.topology.name_network(lab_name)
         xml_path = self.db_wrapper.load_current_laboratory(lab_name)
         self.topology.create_from_xml(xml_path)
+        self.valid = True
 
     def get_topology(self):
         """

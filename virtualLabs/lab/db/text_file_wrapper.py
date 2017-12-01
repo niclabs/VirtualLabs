@@ -1,4 +1,5 @@
 import os
+from virtualLabs import path
 
 
 class TextFileController:
@@ -10,9 +11,8 @@ class TextFileController:
     """
     def __init__(self, lab_path):
         self.labs = {}
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        self.lab_path = dir_path + lab_path
-        self.lab_file = self.lab_path + 'labs.txt'
+        self.lab_path = lab_path
+        self.lab_file = path + self.lab_path + 'labs.txt'
         self.get_labs_from_file()
 
     def get_labs(self):
@@ -52,5 +52,7 @@ class TextFileController:
         """
         if lab_name not in self.labs.keys():
             raise ValueError("Non existant laboratory :(")
-        return self.labs[lab_name]
+
+
+        return self.lab_path + self.labs[lab_name]
 
