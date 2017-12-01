@@ -9,6 +9,7 @@ from virtualLabs.checkers.nic_checker import NICChecker
 from virtualLabs.xml_parsers.network_parser import NetworkParser
 
 from virtualLabs.utils.functions import get_max
+from virtualLabs import path
 
 
 class Network:
@@ -41,6 +42,7 @@ class Network:
         """ Formats the network contents as an XML, and then writes it in a file
         :param filename: File where the XML will be written
         """
+        file_path = path + filename
         xml = {'network': {
             'guests': [],
             'links': []
@@ -56,7 +58,7 @@ class Network:
         for l_id, l in self.links.items():
             xml['network']['links'].append(l.to_dict())
 
-        xml_file = virtualLabs.linux.linux_utils.touch(filename)
+        xml_file = virtualLabs.linux.linux_utils.touch(file_path)
         xd.unparse(xml, xml_file, pretty=True)
         xml_file.close()
 

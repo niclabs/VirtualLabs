@@ -34,7 +34,7 @@ class TextFileController:
         :param name: Name of a laboratory
         :return: Path where the lab is to be saved
         """
-        return name + ".xml"
+        return self.lab_path + name + ".xml"
 
     def save_lab(self, name, path):
         """ Include a new laboratory in the database
@@ -52,7 +52,5 @@ class TextFileController:
         """
         if lab_name not in self.labs.keys():
             raise ValueError("Non existant laboratory :(")
-
-
         return self.lab_path + self.labs[lab_name]
 

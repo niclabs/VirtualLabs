@@ -1,1 +1,1 @@
-route_lab route_lab.xml
+route_lab /lab/db/current_labs/route_lab.xml
