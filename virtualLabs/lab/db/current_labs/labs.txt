@@ -1,0 +1,3 @@
+simple_net /home/cata/PycharmProjects/VirtualLabAPI/virtualLabs/lab/db/current_labs/simple_net.xml
+route_lab route_lab.xml
+route_lab route_lab.xml

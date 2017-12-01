@@ -4,6 +4,7 @@ import atexit
 
 
 def clean_up(lab):
+    """ Function called to to save laboratories not properly closed"""
     lab.save_current_lab()
 
 
@@ -50,6 +51,10 @@ class Laboratory:
         """ Creates a laboratory from one already defined on the host
         :param lab_name: Name of the laboratory
         """
+        self.name = lab_name
+        self.topology.name_network(lab_name)
+        xml_path = self.db_wrapper.load_current_laboratory(lab_name)
+        self.topology.create_from_xml(xml_path)
 
     def get_topology(self):
         """
@@ -68,6 +73,8 @@ class Laboratory:
         """ Saves the current laboratory as current if valid"""
         if self.valid:
             self.db_wrapper.save_current_lab(self.name, self.topology)
-        self.topology.clean_up_topology()
 
+    def destroy_laboratory(self):
+        """ Frees all resources related to the laboratory, effectively destroying it"""
+        self.topology.destroy_network()
 

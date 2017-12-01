@@ -191,10 +191,13 @@ class Network:
         """
         self.links[link_id] = ltypes.create_link_from_type(self.name, link_id, link_info, self.guests,
                                                            self.guest_checker)
-
         return self.links[link_id]
 
-
+    def destroy_network(self):
+        """ Deletes the virtual machines and links of the network"""
+        for k, v in self.guests.items():
+            v.destroy_guest()
+        self.clean_up_topology()
 
 
 

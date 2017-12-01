@@ -1,0 +1,78 @@
+<network>
+	<guests>
+		<guest type="router">
+			<name>pc0</name>
+			<nics>
+				<number>2</number>
+			</nics>
+		</guest>
+		<guest type="router">
+			<name>pc1</name>
+			<nics>
+				<number>2</number>
+			</nics>
+		</guest>
+		<guest type="router">
+			<name>pc2</name>
+			<nics>
+				<number>3</number>
+			</nics>
+		</guest>
+		<guest type="router">
+			<name>pc3</name>
+			<nics>
+				<number>1</number>
+			</nics>
+		</guest>
+	</guests>
+	<links>
+		<link>
+			<endpoints>
+				<endpoint>
+					<link_guest id="0"/>
+					<link_nic id="0"/>
+				</endpoint>
+				<endpoint>
+					<link_guest id="1"/>
+					<link_nic id="0"/>
+				</endpoint>
+			</endpoints>
+		</link>
+			<link>
+			<endpoints>
+				<endpoint>
+					<link_guest id="1"/>
+					<link_nic id="1"/>
+				</endpoint>
+				<endpoint>
+					<link_guest id="2"/>
+					<link_nic id="1"/>
+				</endpoint>
+			</endpoints>
+		</link>
+		<link>
+			<endpoints>
+				<endpoint>
+					<link_guest id="0"/>
+					<link_nic id="1"/>
+				</endpoint>
+				<endpoint>
+					<link_guest id="2"/>
+					<link_nic id="0"/>
+				</endpoint>
+			</endpoints>
+		</link>
+		<link>
+			<endpoints>
+				<endpoint>
+					<link_guest id="2"/>
+					<link_nic id="2"/>
+				</endpoint>
+				<endpoint>
+					<link_guest id="3"/>
+					<link_nic id="0"/>
+				</endpoint>
+			</endpoints>
+		</link>
+	</links>
+</network>

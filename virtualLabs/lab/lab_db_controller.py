@@ -19,6 +19,13 @@ class LabDBController:
         """
         return self.saved_labs.get_lab_file(lab_name)
 
+    def load_current_laboratory(self, lab_name):
+        """ Get a laboratory information from the current labs database
+        :param lab_name: Name of the laboratory to lookup
+        :return Name of the file defining the topology of the lab
+        """
+        return self.current_labs.get_lab_file(lab_name)
+
     def save_laboratory(self, lab_name, network):
         """ Saves a laboratory in the database
         :param lab_name: Name of the laboratory to save
