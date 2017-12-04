@@ -13,4 +13,4 @@ while routing comes from VyOs, a fork of the Vyatta project. Most of the virtual
 VirtualLab comes with a number of pre installed operating system templates that can be used to create guest machines for custom laboratories
 or topologies, plus a set of ready-to-use preconfigured labs that illustrate the use and configuration of a virtual lab.
 
-Visit our [wiki](https://github.com/niclabs/VirtualLabs/wiki)for installation and usage instructions.
+Visit our [wiki](https://github.com/niclabs/VirtualLabs/wiki) for installation and usage instructions.
